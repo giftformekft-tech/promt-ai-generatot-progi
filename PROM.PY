@@ -29,7 +29,7 @@ from PySide6.QtWidgets import (
 # 🔑 OPENAI API KULCS
 # =============================
 # Használd: OPENAI_API_KEY környezeti változóban
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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").strip()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 
 # =============================
 # 🔑 BFL (Black Forest Labs / FLUX) API KULCS
