@@ -1459,20 +1459,21 @@ class MainWindow(QMainWindow):
 
     def start_image_gen_worker(self, prompt: str):
         self.gen_btn.setEnabled(False)
-        self.gen_bulk_btn.setEnabled(False) # Disable bulk btn too
+        self.gen_bulk_btn.setEnabled(False) 
         self.preview.setText("Generálás folyamatban...")
         
         # Gather settings
         s = self.gen_settings
-        provider = "openai" if s.radio_openai.isChecked() else "bfl"
+        is_openai = s.radio_openai.isChecked()
         
-        # BFL Settings
+        # Common Settings
+        size = s.gen_size.currentText()
+        n = int(s.gen_n.value())
+        
+        # Note: BFL specific settings
         bfl_model = s.bfl_model.currentText()
         if bfl_model == "flux-pro-1.1": bfl_model = "flux-pro-1.1" # map display->api if needed
-        
-        # Size
-        size = s.gen_size.currentText()
-        
+
         # Output dir
         out_dir = self.gen_out_edit.text().strip()
         if not out_dir:
@@ -1480,23 +1481,58 @@ class MainWindow(QMainWindow):
             
         custom_name = ""
         if self.current_design_name:
-             # e.g. "b-sotetkek.jpg" -> "b-sotetkek"
              root, _ = os.path.splitext(self.current_design_name)
              custom_name = root
 
-        self.gen_worker = ImageGenWorker(
-            prompt=prompt,
-            provider=provider,
-            api_key=None, # Will be fetched from env/input inside worker or passed here
-            # We need to pass keys if not in env. 
-            # MainWindow has OPENAI_API_KEY from env, but let's pass it explicitly if user typed it
-            openai_key=self.key_edit.text().strip() or OPENAI_API_KEY,
-            bfl_key=BFL_API_KEY, # Env only for now or add field
-            out_dir=out_dir,
-            size=size,
-            bfl_model=bfl_model,
-            custom_name=custom_name
-        )
+        if is_openai:
+            # --- OpenAI Worker ---
+            api_key = self.key_edit.text().strip() or OPENAI_API_KEY
+            if not api_key:
+                self.on_image_gen_error("Hiányzik az OpenAI API kulcs.")
+                return
+
+            quality = s.gen_quality.currentText()
+            transparent = s.gen_transparent.isChecked()
+            
+            self.gen_worker = ImageGenWorker(
+                api_key=api_key,
+                prompt=prompt,
+                out_dir=out_dir,
+                quality=quality,
+                size=size,
+                transparent=transparent,
+                n=n,
+                base_name=custom_name
+            )
+        else:
+            # --- BFL Worker ---
+            bfl_key = s.bfl_key.text().strip() or BFL_API_KEY
+            if not bfl_key:
+                self.on_image_gen_error("Hiányzik a BFL API kulcs.")
+                return
+            
+            base_url = s.bfl_base_url.currentText().strip()
+            endpoint = s.bfl_endpoint.currentText().strip()
+            output_format = s.bfl_output_format.currentText().strip()
+            prompt_upsampling = s.bfl_prompt_upsampling.isChecked()
+            safety_tolerance = int(s.bfl_safety.value())
+            timeout_sec = int(s.bfl_timeout.value())
+
+            self.gen_worker = BFLImageGenWorker(
+                bfl_api_key=bfl_key,
+                prompt=prompt,
+                out_dir=out_dir,
+                base_url=base_url,
+                endpoint=endpoint,
+                size=size,
+                output_format=output_format,
+                n=n,
+                base_name=custom_name,
+                prompt_upsampling=prompt_upsampling,
+                safety_tolerance=safety_tolerance,
+                timeout_sec=timeout_sec
+            )
+        
         self.gen_worker.log.connect(self.append_log)
         self.gen_worker.error.connect(self.on_image_gen_error)
         self.gen_worker.done.connect(self.on_image_gen_done)

@@ -1,0 +1,24 @@
+{
+  "prompt": "Centered, print-ready vector artwork on a vibrant hot pink solid background. Isolated illustration and typographic composition only, no garment, no mockup, no fabric, no shadows. MUST include a thick black vector-style outline around the isolated elements (text and graphics) ONLY. Do NOT add a square frame or border around the entire image. Design a bold sports-themed centerpiece: a high-contrast vector portrait trio (large frontal portrait, smaller side profile, and a small back-facing silhouette) rendered as clean halftone/photo-illustration vectors with energetic red and white paint-splatter strikes radiating outward from the portraits. Add a simple hand-drawn crown motif above the central head and a small graffiti-style tag reading GOAT near the top right. Typography: dominant white brush-script headline with heavy weight, aggressive brush textures and diagonal slant, paired with a condensed athletic sans for supporting text; all text elements have the same thick black vector outline. Layout: headline layered over the lower portion of the central portrait, secondary sans text placed above the headline and aligned center, crown and GOAT tag balanced top area; maintain balanced negative space and clean scalable vector shapes for print. Include the exact artwork text as required: TEXT Hungarian: \"CSAK EGY KAPÁS\" (above) \"VÁLASZT EL...\". Keep everything isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no shadows, no photo realism, no background gradients, no frame, no watermark, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "bold brush script",
+    "athletic condensed sans",
+    "vector portrait",
+    "grunge splatter",
+    "stencil outline",
+    "sports poster"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "white (headline and highlights)",
+    "black (thick outlines)",
+    "red accents",
+    "natural skin tones (vectorized)"
+  ],
+  "debug": {
+    "extracted_text_raw": "GOAT; CRISTIANO RONALDO (large brush-script headline); RONALDO 7 (on jersey/back)",
+    "confidence": "medium",
+    "notes": "Primary large script reads 'CRISTIANO RONALDO' and a smaller 'GOAT' tag is visible; jersey/back number appears as '7'. Stylized brush type and overlap cause some letters to be partially obscured, so exact spacing/kerning is inferred."
+  }
+}
