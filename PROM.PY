@@ -1455,9 +1455,14 @@ class MainWindow(QMainWindow):
         if items:
             self.result_list.setCurrentItem(items[0])
 
-        self.start_image_gen_worker(prompt)
+        try:
+            self.start_image_gen_worker(prompt)
+        except Exception as e:
+             self.append_log(f"CRITICAL ERROR calling start_image_gen_worker: {e}")
+             self.on_image_gen_error(str(e))
 
     def start_image_gen_worker(self, prompt: str):
+        self.append_log("DEBUG: check 1 - enter start_image_gen_worker")
         self.gen_btn.setEnabled(False)
         self.gen_bulk_btn.setEnabled(False) 
         self.preview.setText("Generálás folyamatban...")
@@ -1537,7 +1542,11 @@ class MainWindow(QMainWindow):
         self.gen_worker.error.connect(self.on_image_gen_error)
         self.gen_worker.done.connect(self.on_image_gen_done)
         
-        self.gen_worker.start()
+        self.append_log("DEBUG: check 2 - starting worker")
+        try:
+             self.gen_worker.start()
+        except Exception as e:
+             self.append_log(f"CRITICAL: Failed to start worker: {e}")
 
     def on_image_gen_error(self, msg: str):
         self.append_log("=== HIBA (image gen) ===")
