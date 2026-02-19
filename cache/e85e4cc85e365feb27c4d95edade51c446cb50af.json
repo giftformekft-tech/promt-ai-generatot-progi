@@ -1,0 +1,26 @@
+{
+  "prompt": "Create a bold vector print artwork on a transparent background, centered composition, print-ready clean design, isolated artwork only; no garment, no mockup, no fabric, no shadows. TEXT: \"NÉGY\\nKU*VAANYÁD UTÁN...\" Use heavy, condensed display typography with geometric, slightly irregular stencil cuts and tight kerning; letters are solid white with a crisp purple offset outline for pop (keep all edges sharp and vector-friendly). Layout: two stacked centered lines, first line compact \"NÉGY\", second larger \"KU*VAANYÁD UTÁN...\" Surround the text with five playful organic splash/blot shapes (flat solid fills) positioned asymmetrically as accents around the type: teal top-left, yellow top-right, magenta bottom-left, light blue bottom-center, and royal blue bottom-right. No gradients, no textures, no photo effects; flat vector fills, clean outlines, high-contrast, CMYK-friendly color choices, scalable for print. Isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "mockup, garment, clothing, fabric, photo, shadows, people, background, watermark, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "bold display typography",
+    "stencil-like lettering",
+    "playful splatter illustrations",
+    "flat vector art",
+    "print-ready",
+    "centered composition"
+  ],
+  "colors": [
+    "white",
+    "teal/cyan",
+    "lime yellow",
+    "magenta",
+    "light blue",
+    "royal blue",
+    "purple"
+  ],
+  "debug": {
+    "extracted_text_raw": "NÉGY KU*VAANYÁD UTÁN...",
+    "confidence": "medium",
+    "notes": "The image shows three stacked text lines; for the two-line required output I combined the lower two lines into one. The asterisk likely censors a letter in 'KU*VAANYÁD' and diacritics are clear on NÉGY and UTÁN but the second word's exact accented vowel(s) are slightly ambiguous. Placement of the asterisk and exact spacing (KU*VA vs KUV A) is inferred from visual grouping."
+  }
+}

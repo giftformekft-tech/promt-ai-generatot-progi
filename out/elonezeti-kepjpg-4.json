@@ -1,0 +1,25 @@
+{
+  "prompt": "Create an isolated, print-ready illustration on a transparent background, centered composition, focusing only on the print artwork. TEXT: \"STAY\\nURBANIC\". Design a bold, urban graffiti composition: top line in large, white, rough-edged brush-style uppercase letters with heavy paint splatters and smeared strokes; bottom line in vivid yellow, chunky hand-painted graffiti script with pronounced vertical paint drips and a distressed texture suitable for screen printing. Include a detailed cartoon streetwise chimp character as the central mascot: three-quarter back view with a small yellow crown perched above its head, confident pose, strong black line art, denim-blue jacket accents and red sneaker highlights — integrate the character so the yellow word overlays slightly across the character's upper back for layered depth. Add spray-paint splatters, subtle halftone shading and ink splatter drips that connect typography and illustration for cohesive street-art energy. Maintain vector-clean outlines, high-contrast values, simplified shading for printing, and balanced negative space around the centered stack. Transparent background, print-ready clean design, isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "mockup, garment, clothing, model, photo, fabric, shadows, background, watermark, low-resolution, photorealistic, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "graffiti",
+    "street art",
+    "comic cartoon",
+    "bold line art",
+    "spray paint drips",
+    "distressed texture",
+    "print-ready vector"
+  ],
+  "colors": [
+    "white",
+    "bright yellow",
+    "black (ink outlines)",
+    "denim blue",
+    "red accents"
+  ],
+  "debug": {
+    "extracted_text_raw": "STAY URBANIC",
+    "confidence": "medium",
+    "notes": "Top line clearly reads like a four-letter graffiti word resembling 'STAY' (S is distinct; middle letters T/A are stylized but plausible). Bottom yellow word reads as seven letters resembling 'URBANIC' but could also be 'URANIC' or another similar graffiti spelling; the brushy, overlapping drips and stylization make the B ambiguous. Chosen best-guess 'URBANIC' to fit urban/streetwear theme."
+  }
+}
