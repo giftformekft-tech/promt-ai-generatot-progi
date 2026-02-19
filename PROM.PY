@@ -1598,9 +1598,103 @@ class MainWindow(QMainWindow):
                 )
             )
 
+    # ----- Settings Persistence -----
+    def load_settings(self):
+        if not os.path.exists("settings.json"):
+            return
+            
+        try:
+            with open("settings.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+                
+            # API Keys
+            if "openai_key" in data: self.key_edit.setText(data["openai_key"])
+            # BFL key is inside the dialog settings, we need to apply it there or store it
+            # Since dialog is created on init, we can set default values in it?
+            # Actually ImageGenSettingsDialog is created in init.
+            # We need to access its widgets.
+            
+            # Input
+            if "seed_url" in data: self.seed_edit.setText(data["seed_url"])
+            if "out_dir" in data: self.out_edit.setText(data["out_dir"])
+            if "cache_dir" in data: self.cache_edit.setText(data["cache_dir"])
+            if "max_items" in data: self.max_items.setValue(data["max_items"])
+            if "delay_ms" in data: self.delay_ms.setValue(data["delay_ms"])
+            if "scroll_rounds" in data: self.scroll_rounds.setValue(data["scroll_rounds"])
+            
+            # Options
+            if "headless" in data: self.headless_cb.setChecked(data["headless"])
+            if "force_text" in data: self.force_text_cb.setChecked(data["force_text"])
+            if "bg_idx" in data: self.bg_combo.setCurrentIndex(data["bg_idx"])
+            if "contour" in data: self.contour_cb.setChecked(data["contour"])
+            if "path_filter" in data: self.path_filter_edit.setText(data["path_filter"])
+            if "extra_hosts" in data: self.extra_hosts_edit.setText(data["extra_hosts"])
+            if "require_productish" in data: self.require_productish_cb.setChecked(data["require_productish"])
+            
+            # Gen Settings
+            if "gen_out_dir" in data: self.gen_out_edit.setText(data["gen_out_dir"])
+            
+            # Dialog settings (accessing directly)
+            s = self.gen_settings
+            if "bfl_key" in data: s.bfl_key.setText(data["bfl_key"])
+            if "gen_provider_idx" in data: 
+                s.gen_provider.setCurrentIndex(data["gen_provider_idx"])
+                s.on_provider_changed() # Update UI
+            if "gen_size" in data: s.gen_size.setCurrentText(data["gen_size"])
+            if "gen_n" in data: s.gen_n.setValue(data["gen_n"])
+            if "bfl_model" in data: s.bfl_model.setCurrentText(data["bfl_model"])
+                 
+            self.append_log("Beállítások betöltve: settings.json")
+            
+        except Exception as e:
+            self.append_log(f"Hiba a beállítások betöltésekor: {e}")
+
+    def save_settings(self):
+        s = self.gen_settings
+        data = {
+            "openai_key": self.key_edit.text().strip(),
+            "os_env_openai": os.environ.get("OPENAI_API_KEY", ""), # just for ref
+            
+            "seed_url": self.seed_edit.text().strip(),
+            "out_dir": self.out_edit.text().strip(),
+            "cache_dir": self.cache_edit.text().strip(),
+            "max_items": self.max_items.value(),
+            "delay_ms": self.delay_ms.value(),
+            "scroll_rounds": self.scroll_rounds.value(),
+            
+            "headless": self.headless_cb.isChecked(),
+            "force_text": self.force_text_cb.isChecked(),
+            "bg_idx": self.bg_combo.currentIndex(),
+            "contour": self.contour_cb.isChecked(),
+            "path_filter": self.path_filter_edit.text(),
+            "extra_hosts": self.extra_hosts_edit.text(),
+            "require_productish": self.require_productish_cb.isChecked(),
+            
+            "gen_out_dir": self.gen_out_edit.text().strip(),
+            
+            # Dialog
+            "bfl_key": s.bfl_key.text().strip(),
+            "gen_provider_idx": s.gen_provider.currentIndex(),
+            "gen_size": s.gen_size.currentText(),
+            "gen_n": s.gen_n.value(),
+            "bfl_model": s.bfl_model.currentText(),
+        }
+        
+        try:
+            with open("settings.json", "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+            # self.append_log("Beállítások mentve.") # Don't spam log on close
+        except Exception as e:
+            print(f"Hiba a beállítások mentésekor: {e}")
+
+    def closeEvent(self, event):
+        self.save_settings()
+        event.accept()
+
 def main():
     app = QApplication([])
     w = MainWindow()
+    w.load_settings() # Load on startup
     w.show()
     app.exec()
 
