@@ -1,0 +1,21 @@
+{
+  "prompt": "Centered, print-ready vector artwork on a vibrant hot pink solid background. Isolated artwork only; no garment, no mockup, no fabric, no shadows. Main composition: vertically stacked, centered layout with a large, highly detailed white engraved-style carp illustration in the middle and bold brush-script text above and below. All text and graphics must have a thick black vector-style outline around the isolated elements (text and graphics) ONLY. Do NOT add a square frame or border around the entire image. TEXT Hungarian: \"EZA NAPOM\" (above) \"FEMPONTYA\". Typography: chunky, all-caps distressed brush script with heavy weight, rough paint texture, slightly slanted italic feel, tight tracking; white fill with small internal distressed flecks and crisp edges; proportions balanced so the top text crowns the fish and the bottom text anchors it. Illustration: realistic carp rendered as clean white vector line art with engraved-style hatching, fine crosshatch shading and solid white highlights to convey scale texture and three-dimensional form; slightly angled three-quarter profile, prominent fins and scales, strong silhouette for legibility at print size. Finish: clean vector look, high contrast white artwork on hot pink, thick solid black outline only around the fish and both text blocks, no extra outlines on the background, no frame. Print-ready, scalable, high-contrast design suitable for screen printing.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no wrinkles, no tags, no shadows, no photo-realism, no people, no background gradients, no border/frame, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "engraved line art",
+    "distressed brush script",
+    "bold vector outline",
+    "vintage tattoo aesthetic",
+    "print-ready screenprint"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "white (graphics and text)",
+    "black (thick vector outline)"
+  ],
+  "debug": {
+    "extracted_text_raw": "Top line: EZA NAPOM; Bottom line: FEMPONTYA (best guess reading from stylized brush script in image)",
+    "confidence": "medium",
+    "notes": "Top two words clearly read as 'EZ A NAPOM' (written without space as stylized 'EZA NAPOM'). Bottom word appears as 'FEMPONTYA' in uppercase brush letters; ambiguity exists in the middle character sequence (could be FEMPONTYA/FEMPONTJA) and the original uses no diacritics, so final letter interpretation is uncertain."
+  }
+}

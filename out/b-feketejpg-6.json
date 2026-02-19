@@ -1,0 +1,26 @@
+{
+  "prompt": "Centered print artwork on a vibrant hot pink solid background, isolated artwork only; no garment, no mockup, no fabric, no shadows. Thick black vector-style outline around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. Composition: top bold headline, centered square comic-style illustration, large tagline below, all centered and print-ready clean design. Typography: top line in all-caps Hungarian display type, heavy condensed rounded sans with subtle hand-distressed texture, white fill, thick black vector stroke; middle speech text in bold comic sans-style uppercase inside a clean white speech bubble with a thin internal stroke and thick outer black vector outline; bottom tagline in large heavy rounded slab/bubble letters, all-caps Hungarian, white fill with subtle vintage distress, thick black vector stroke, tight letterspacing. Graphics: simplified flat-vector, cartoon-style, single-panel comic illustration of the “this is fine” dog motif rendered as a friendly tan-brown cartoon dog sitting at a small wooden table with a steaming mug, surrounded by stylized yellow-orange flames and small black smoke puffs; a small framed picture on the greenish wall behind the dog; keep shapes flat, high-contrast colors, minimal shading, and avoid photographic texture. All graphic elements enclosed only by the thick black vector-style outline; no drop shadows, no gradients, clean silhouette. Centered layout, balanced margins, print-ready separation of elements for screen printing. TEXT Hungarian: \"JELENLEGI ÁLLAPOTOM:\" (above) TEXT English: \"THIS IS FINE.\" (center) TEXT Hungarian: \"STABILAN INSTABIL\" (below)",
+  "negative_prompt": "no mockup, no garment, no fabric, no photo, no realistic textures, no shadows, no border, no extra frames, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "flat vector",
+    "comic panel",
+    "bold display typography",
+    "thick black outline",
+    "print-ready",
+    "vintage distress"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "white (text)",
+    "black (outline)",
+    "yellow",
+    "orange",
+    "tan/brown",
+    "green (wall)"
+  ],
+  "debug": {
+    "extracted_text_raw": "JELENLEGI ÁLLAPOTOM: THIS IS FINE. STABILAN INSTABIL",
+    "confidence": "high",
+    "notes": "Top Hungarian headline clearly reads 'JELENLEGI ÁLLAPOTOM:' including colon. Middle speech bubble English reads 'THIS IS FINE.' Bottom slogan reads 'STABILAN INSTABIL' in two stacked words; all are uppercase and legible."
+  }
+}

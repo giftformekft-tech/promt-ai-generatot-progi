@@ -1,0 +1,26 @@
+{
+  "prompt": "Vibrant hot pink solid background; centered composition; isolated print artwork only; thick black vector-style outline around the isolated elements (text and graphics) ONLY; no square frame or border around the entire image; print-ready clean design, high-contrast bold shapes, isolated artwork only; no garment, no mockup, no fabric, no shadows. Typography: bold, chunky playful bubble/retro comic display type in all caps, heavy thick black outline, bright yellow-to-gold gradient fill with subtle orange shading for depth and white highlight streaks on letter tops; letters slightly rounded with compact kerning and exaggerated soft counters for a fun, aggressive sticker look. Layout: stacked, dense vertical hierarchy — large top slogan line, smaller secondary line, very large emphasized central word, then a narrow supportive line and a final punchline line; decorative small puffy white clouds used as separators and overlapping letter edges for layering. Graphics: cheerful cartoon sun face ornament (simple round eyes, wide smile, short radial rays) integrated near the central word as an accent; additional small puffy white clouds and tiny accent stars or sparkles around text. All elements are vector-flat, high-contrast, crisp edges, center-aligned; maintain only the thick black vector-style outline around text and graphics. TEXT Hungarian: \"ÉLJ A MÁNAK!\" (above) \"MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ!\" Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no shadows, no photo, no people, no background clutter, no frame, no watermark, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "bold bubble lettering",
+    "sticker-style",
+    "cartoon",
+    "playful",
+    "vector",
+    "print-ready",
+    "retro comic"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "sunny yellow",
+    "gold gradient",
+    "orange accents",
+    "white highlights",
+    "black outline"
+  ],
+  "debug": {
+    "extracted_text_raw": "ÉLJ A MÁNAK! MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ! (there is a very small illegible URL/tagline at the bottom that I did not transcribe)",
+    "confidence": "high",
+    "notes": "Main large text is clear and reads as two stacked phrases with a multi-line structure; small tiny text or URL at the very bottom of the design is too small to read reliably, but the primary slogan text is clearly legible with accents on Á and Ó."
+  }
+}
