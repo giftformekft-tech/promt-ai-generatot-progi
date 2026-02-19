@@ -322,8 +322,8 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
             "1) A pólót/pulcsit/modellt/mockupot IGNORÁLD. Ne írd le a ruhát.\n"
             "2) CSAK a nyomat grafikáját írd le: illusztráció + tipográfia + kompozíció.\n"
             f"3) HÁTTÉR: {bg_instruction}. {contour_instruction}\n"
-            "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. FONTOS: NE használj '\\n' vagy sortörést a szövegben.\n"
-            "   Ehelyett írd le az elhelyezkedést: 'TEXT1' above 'TEXT2'.\n"
+            "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. Ha magyar, írd: 'TEXT Hungarian: \"...\"'. Ha angol: 'TEXT English: \"...\"'.\n"
+            "   FONTOS: NE használj '\\n' vagy sortörést a szövegben. Ehelyett írd le az elhelyezkedést: 'TEXT...' (above) 'TEXT...'.\n"
             "5) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
             "   TILOS bármilyen bizonytalanság jelölést beleírni a promptba (pl. UNCERTAIN, ?, brackets).\n"
             "   A bizonytalanságot kizárólag a debug mezőbe írd le.\n"
@@ -333,7 +333,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} centered composition, print-ready clean design, and TEXT: \\"LINE1\\" (above) ... (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} centered composition, print-ready clean design, and TEXT Hungarian: \\"CSAK EGY KAPÁS\\" (above) \\"VÁLASZT EL...\\" (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'
