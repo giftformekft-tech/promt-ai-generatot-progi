@@ -1,24 +1,23 @@
 {
-  "prompt": "Create a single isolated print artwork on a vibrant hot pink solid background, centered composition, print-ready clean design. Feature a bold circular emblem with a thick bold black border around the entire emblem and bold black outlines around all text and graphic elements. Central graphic: a stylized white water polo ball with strong black linework and minimal distressed detailing for character, positioned above dynamic, crisp vector royal-blue and white splash waves. Include decorative small stars and subtle circular stamp dots inside the emblem while keeping overall look clean and high-contrast. Typography and layout: TEXT Hungarian: \"VÍZILABDA\" (above) TEXT Hungarian: \"FINOM SPORT\" (center) TEXT Hungarian: \"DURVA EMBEREKNEK\" (below). Render the top word arched along the upper rim in large condensed all-caps sans-serif with heavy weight and a thick black outline; place the middle line in a compact horizontal badge/banner in uppercase condensed sans, smaller scale; render the bottom phrase as a wide heavy all-caps slab/condensed display type with tight tracking and matching black outline. All type in white fill with thick black stroke for maximum contrast. Maintain clean vector edges, print-ready separations for spot color printing, and ensure the bold black border unifies both text and graphic elements. Isolated artwork only; no garment, no mockup, no fabric, no shadows.",
-  "negative_prompt": "no garment, no mockup, no fabric texture, no shadows, no people, no photography, no background details, no watermark, low-resolution, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "Centered, print-ready isolated sports emblem artwork on a vibrant hot pink solid background. MUST include: thick black vector-style outline around the isolated elements (text and graphics) ONLY. Do NOT add a square frame or border around the entire image. Isolated artwork only; no garment, no mockup, no fabric, no shadows. A bold, centered circular badge composition featuring a realistic vector volleyball at center with stylized energetic splashing ocean waves beneath, small decorative stars and dot speckles inside the badge, and subtle ink-splash texture for character while keeping overall print-clean. Typography and layout: TEXT Hungarian: \"VÍZILABDA\" (arched top) \"FINOM SPORT\" (small centered banner across waves) \"DURVA EMBEREKNEK\" (large bold baseline). Use strong, condensed uppercase sans-serif for all text with slight vintage distress on letterforms for a rugged sport look; the top word arched to follow the badge curve, the middle phrase set in a compact horizontal ribbon/banner across the lower part of the ball and waves, the bottom line large and dominant, tightly tracked. Colors: primary artwork in solid white with royal blue accents in the waves, all isolated graphic shapes and text surrounded by a consistent thick black vector outline to read cleanly on the hot pink background. Clean vector shapes, sharp edges, flat colors (no photorealistic shading), scalable for print, centered composition, high-contrast legibility.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no shadows, no models, no photo, no background clutter, no frame, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "bold graphic",
-    "sports emblem",
-    "vector art",
-    "clean print-ready",
-    "high-contrast",
-    "stencil-like",
-    "minimal distressed accent"
+    "vintage sports badge",
+    "bold condensed uppercase typography",
+    "vector illustration",
+    "distressed texture",
+    "centered composition",
+    "print-ready"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "black (bold border and outlines)",
-    "white (text and ball)",
-    "royal blue (water splash accents)"
+    "white (primary artwork)",
+    "black (thick outline)",
+    "royal blue (wave accents)"
   ],
   "debug": {
-    "extracted_text_raw": "VÍZILABDA FINOM SPORT DURVA EMBEREKNEK",
+    "extracted_text_raw": "VÍZILABDA / FINOM SPORT / DURVA EMBEREKNEK",
     "confidence": "high",
-    "notes": "All three lines are clear and legible in the reference: top arched 'VÍZILABDA', middle smaller 'FINOM SPORT', bottom large 'DURVA EMBEREKNEK'."
+    "notes": "Top arch reads clearly as 'VÍZILABDA' with accent on Í; middle small ribbon text reads 'FINOM SPORT'; bottom large text reads 'DURVA EMBEREKNEK'. All three lines are distinct and legible in the reference image."
   }
 }

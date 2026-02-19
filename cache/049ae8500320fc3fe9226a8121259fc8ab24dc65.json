@@ -1,24 +1,26 @@
 {
-  "prompt": "Centered, print-ready clean vector artwork of a bold, playful Hungarian slogan in chunky rounded comic lettering on a vibrant hot pink solid background, with a bold black border framing both the text and all graphic elements; isolated artwork only; no garment, no mockup, no fabric, no shadows. TEXT Hungarian: \"ÉLJ A MÁNAK!\" (above) \"MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ!\" Typography and layout: stacked, tightly grouped lines; large heavy rounded display type with thick black outline, crisp white inner highlights, bright golden-yellow gradient fill for main words, smaller condensed uppercase for the midline; slight staggered layering so words partially overlap for dynamic comedic effect; include an additional small curved banner treatment behind the smallest line for emphasis. Graphics: cheerful stylized smiling sun mascot integrated into the composition (simple round yellow sun with a friendly face, white highlights and thick black outline), small fluffy white clouds used as separators and accents around text, all graphic elements sharing the same bold black outline; overall high-contrast, flat vector look with clean edges and no photographic textures, print-ready for screen printing.",
-  "negative_prompt": "no mockup, no garment, no fabric, no photo, no models, no people, no background textures, no shadows, low resolution, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "A bold, centered print-only artwork on a vibrant hot pink solid background. Isolated artwork only; no garment, no mockup, no fabric, no shadows. The design is a compact stacked Hungarian slogan in playful comic bubble typography with accompanying small cartoon graphics. TEXT Hungarian: \"ÉLJ A MÁNAK!\" (above) TEXT Hungarian: \"MERT A HOLNAP\" (center, large) TEXT Hungarian: \"VALÓSZÍNŰLEG\" (small, under HOLNAP) TEXT Hungarian: \"MÉG SZARABB LESZ!\" (bottom). Typography: chunky, rounded, hand-lettered bubble letters with a bold condensed variant for the small line; letters filled with a bright yellow-to-gold vertical gradient, strong white glossy highlights and subtle darker inner shading for depth. Graphics: small cheerful orange smiling sun icon integrated near the middle-right of the composition and several small cartoon white clouds with light blue shading placed around words to balance the layout. Styling rules: thick black vector-style outline around the isolated elements (text and graphics) ONLY; no square frame or border around the entire image. Composition: centered, tightly stacked hierarchy with 'HOLNAP' as the dominant focal word, slight arching of the top line, high-contrast, print-ready clean vector design with crisp edges, flat color fills, and no background texture or photographic effects. Isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no t-shirt, no mockup, no garment, no fabric texture, no wrinkles, no shadows, no photo realism, no people, no frame, no border, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "bold comic",
+    "bold comic bubble",
+    "vector illustration",
+    "flat graphic",
     "playful cartoon",
-    "flat vector",
+    "90s pop retro",
     "print-ready",
-    "high-contrast",
-    "clean lines",
-    "stacked typography"
+    "high-contrast"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "bright golden yellow",
-    "white",
-    "black"
+    "bright yellow-to-gold gradient (text)",
+    "white (highlights and clouds)",
+    "black (thick vector outline)",
+    "orange (sun)",
+    "light blue (cloud shading)"
   ],
   "debug": {
     "extracted_text_raw": "ÉLJ A MÁNAK! MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ!",
     "confidence": "high",
-    "notes": "All main phrases are clear and legible in the artwork. Accent marks on Ó and Á are visible. Minor small footer text (web address) present in the image was intentionally excluded from the artwork prompt."
+    "notes": "All lines readable and typical layout: top 'ÉLJ A MÁNAK!', then 'MERT A HOLNAP' with 'VALÓSZÍNŰLEG' smaller underneath, then 'MÉG SZARABB LESZ!'. Punctuation (exclamation marks) present on first and final lines; accents on Hungarian characters are clear."
   }
 }

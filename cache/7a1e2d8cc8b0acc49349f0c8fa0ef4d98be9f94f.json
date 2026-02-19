@@ -1,31 +1,27 @@
 {
-  "prompt": "Vibrant, centered print artwork on a solid vibrant hot pink background; bold black border around both the text and all graphic elements; clean, print-ready vector illustration and typography only, isolated artwork only; no garment, no mockup, no fabric, no shadows. Composition: large circular scenic badge in the center with a cheerful stylized cartoon fisherman on the right holding a bent fishing rod and a frothy beer mug, a large happy cartoon fish leaping on the left, cattails at the water's edge, stylized water waves and a simple sun and sky in the background; everything drawn in a playful, bold cartoon style with thick smooth outlines. Typography: playful hand-lettered Hungarian display type, thick rounded letterforms with heavy black stroke, stacked and slightly arched to follow the circle; decorative small icons (fish, bubbles, dots) integrated between words. Include TEXT Hungarian: \"CSAK EGY KAPÁS\" (above) \"VÁLASZT EL A BOLDOGSÁGTÓL\". Ensure a continuous bold black border around the circular badge and the text, and individual bold black outlines around major graphic elements for sticker-like separation. Colors: flat, saturated palette — warm golden yellow and orange accents for sun and fish highlights, greens and teals for fish and reeds, light warm browns for hat and vest, skin tones for fisherman, bright cyan highlights on water, white highlights for foam and text accents; maintain posterized flat color fills, minimal gradients, high contrast for screen printing. Layout: centered, symmetric badge, text arched above and below the circle, balanced spacing for legibility at apparel print scale, print-ready clean lines and single-layer separations where possible. Final output: isolated artwork only on the specified solid vibrant hot pink background, high-contrast vector-ready PNG with crisp edges and no extraneous elements.",
-  "negative_prompt": "mockup, garment, fabric, photo, shadows, background texture, watermark, lowres, photorealism, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "Create a centered, print-ready vector illustration of the PRINT ARTWORK only on a vibrant hot pink solid background. Include a thick black vector-style outline around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. Composition: top arched headline TEXT Hungarian: \"CSAK EGY KAPÁS\" (above) set in bold, hand-drawn uppercase display type with chunky rounded letterforms, aqua-to-cyan fill, subtle white highlight, and a matching thick black outline. Center: a circular, playful cartoon scene showing a bearded fisherman in a hat holding a curving fishing rod in one hand and a frothy beer mug in the other, a large green bass leaping from stylized water with dynamic splash lines and motion arcs, a simple yellow sun and horizontal water bands in the background, and cattails at the scene edges. All graphics are flat, bold, clean vector shapes with high contrast colors and no photorealism. Bottom curved slogan TEXT Hungarian: \"VÁLASZT EL A BOLDOGSÁGTÓL\" (below) in a matching display type, slightly condensed, aqua gradient fill with white highlight and the same thick black outline as the other elements. Maintain strong hierarchy (headline large, illustration dominant, slogan below), centered alignment, balanced spacing, and print-ready cleanliness. Use limited, high-contrast palette, crisp outlines, no fabric texture, no mockup effects, no drop shadows, and no border around the whole image. Isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "mockup, garment, clothing, fabric texture, model, photo, photorealistic, drop shadows, background gradients, border, frame, watermark, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "bold cartoon",
-    "vector",
-    "sticker style",
-    "hand-lettered",
+    "cartoon",
+    "bold vector",
     "flat colors",
-    "thick outlines",
+    "clean lines",
+    "print-ready",
     "playful",
-    "badge composition",
-    "print-ready"
+    "hand-drawn typography"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "black (borders/outlines)",
-    "golden yellow",
-    "orange",
-    "teal",
-    "cyan",
-    "green",
-    "light brown",
-    "white"
+    "aqua / cyan (text fills)",
+    "lime green (fish)",
+    "golden yellow (sun)",
+    "orange accents",
+    "white highlights",
+    "black (thick outlines)"
   ],
   "debug": {
-    "extracted_text_raw": "CSAK EGY KAPÁS VÁLASZT EL A BOLDOGSÁGTÓL",
+    "extracted_text_raw": "CSAK EGY KAPÁS  VÁLASZT EL A BOLDOGSÁGTÓL",
     "confidence": "high",
-    "notes": "Top arched phrase clearly reads 'CSAK EGY KAPÁS'. Bottom phrase reads 'VÁLASZT EL A BOLDOGSÁGTÓL' as a continuous line; diacritics and spacing are legible in the artwork."
+    "notes": "The image clearly shows an arched top headline reading 'CSAK EGY KAPÁS' and a bottom curved slogan reading 'VÁLASZT EL A BOLDOGSÁGTÓL'. All words and diacritics are legible; text style is decorative uppercase which supports high confidence."
   }
 }

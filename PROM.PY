@@ -1326,6 +1326,10 @@ class MainWindow(QMainWindow):
 
     # ----- Results viewer -----
     def on_result_ready(self, name: str, data: dict, image_url: str):
+        # Ensure img_path is in data for bulk gen
+        if "img_path" not in data:
+            data["img_path"] = image_url
+            
         self._results[name] = data
         self._image_urls[name] = image_url
 
