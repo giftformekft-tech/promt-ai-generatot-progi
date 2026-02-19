@@ -1331,7 +1331,10 @@ class MainWindow(QMainWindow):
 
         existing = self.result_list.findItems(name, Qt.MatchExactly)
         if not existing:
-            self.result_list.addItem(QListWidgetItem(name))
+            qt_item = QListWidgetItem(name)
+            qt_item.setFlags(qt_item.flags() | Qt.ItemIsUserCheckable)
+            qt_item.setCheckState(Qt.Unchecked)
+            self.result_list.addItem(qt_item)
             self.result_list.scrollToBottom()
 
         self.result_list.setCurrentRow(self.result_list.count() - 1)
@@ -1382,6 +1385,90 @@ class MainWindow(QMainWindow):
         if is_openai:
             pass # We removed the old block, just flow through
 
+        # Output dir
+        out_dir = self.gen_out_edit.text().strip()
+        if not out_dir:
+            out_dir = os.path.abspath("out_gen")
+            
+        custom_name = ""
+        if self.current_design_name:
+             # e.g. "b-sotetkek.jpg" -> "b-sotetkek"
+             root, _ = os.path.splitext(self.current_design_name)
+             custom_name = root
+
+        self.gen_worker = ImageGenWorker(
+            prompt=prompt,
+            provider=provider,
+            api_key=None, # Will be fetched from env/input inside worker or passed here
+            # We need to pass keys if not in env. 
+            # MainWindow has OPENAI_API_KEY from env, but let's pass it explicitly if user typed it
+            openai_key=self.key_edit.text().strip() or OPENAI_API_KEY,
+            bfl_key=BFL_API_KEY, # Env only for now or add field
+            out_dir=out_dir,
+            size=size,
+            bfl_model=bfl_model,
+            custom_name=custom_name
+        )
+        self.gen_worker.log.connect(self.append_log)
+        self.gen_worker.error.connect(self.on_image_gen_error)
+        self.gen_worker.done.connect(self.on_image_gen_done)
+        
+        self.gen_worker.start()
+
+    def start_bulk_generation(self):
+        # 1. Collect selected items
+        self.gen_queue = []
+        for i in range(self.result_list.count()):
+            item = self.result_list.item(i)
+            if item.checkState() == Qt.Checked:
+                base = item.text()
+                data = self._results.get(base)
+                if data:
+                    self.gen_queue.append(data)
+        
+        if not self.gen_queue:
+            QMessageBox.information(self, "Info", "Nincs kijelölve elem a listában.")
+            return
+            
+        self.append_log(f"=== BULK GENERATION STARTED: {len(self.gen_queue)} items ===")
+        self.process_next_gen_item()
+
+    def process_next_gen_item(self):
+        if not self.gen_queue:
+            self.append_log("=== BULK GENERATION FINISHED ===")
+            QMessageBox.information(self, "Kész", "Minden kijelölt kép generálása kész.")
+            return
+
+        next_data = self.gen_queue.pop(0)
+        base = os.path.basename(next_data.get("img_path", ""))
+        self.current_design_name = base # Set logic name for output file
+        prompt = next_data.get("prompt", "")
+        
+        self.append_log(f"--- Bulk item: {base} ---")
+        
+        # Highlight in list (optional but nice)
+        items = self.result_list.findItems(base, Qt.MatchExactly)
+        if items:
+            self.result_list.setCurrentItem(items[0])
+
+        self.start_image_gen_worker(prompt)
+
+    def start_image_gen_worker(self, prompt: str):
+        self.gen_btn.setEnabled(False)
+        self.gen_bulk_btn.setEnabled(False) # Disable bulk btn too
+        self.preview.setText("Generálás folyamatban...")
+        
+        # Gather settings
+        s = self.gen_settings
+        provider = "openai" if s.radio_openai.isChecked() else "bfl"
+        
+        # BFL Settings
+        bfl_model = s.bfl_model.currentText()
+        if bfl_model == "flux-pro-1.1": bfl_model = "flux-pro-1.1" # map display->api if needed
+        
+        # Size
+        size = s.gen_size.currentText()
+        
         # Output dir
         out_dir = self.gen_out_edit.text().strip()
         if not out_dir:
