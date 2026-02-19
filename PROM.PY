@@ -1462,14 +1462,13 @@ class MainWindow(QMainWindow):
              self.on_image_gen_error(str(e))
 
     def start_image_gen_worker(self, prompt: str):
-        self.append_log("DEBUG: check 1 - enter start_image_gen_worker")
         self.gen_btn.setEnabled(False)
         self.gen_bulk_btn.setEnabled(False) 
         self.preview.setText("Generálás folyamatban...")
         
         # Gather settings
         s = self.gen_settings
-        is_openai = s.radio_openai.isChecked()
+        is_openai = (s.gen_provider.currentIndex() == 0)
         
         # Common Settings
         size = s.gen_size.currentText()
@@ -1542,7 +1541,6 @@ class MainWindow(QMainWindow):
         self.gen_worker.error.connect(self.on_image_gen_error)
         self.gen_worker.done.connect(self.on_image_gen_done)
         
-        self.append_log("DEBUG: check 2 - starting worker")
         try:
              self.gen_worker.start()
         except Exception as e:
