@@ -1471,7 +1471,7 @@ class MainWindow(QMainWindow):
         n = int(s.gen_n.value())
         
         # Note: BFL specific settings
-        bfl_model = s.bfl_model.currentText()
+        bfl_model = s.bfl_endpoint.currentText() # was bfl_model but widget is bfl_endpoint
         if bfl_model == "flux-pro-1.1": bfl_model = "flux-pro-1.1" # map display->api if needed
 
         # Output dir
@@ -1642,7 +1642,7 @@ class MainWindow(QMainWindow):
                 s.on_provider_changed() # Update UI
             if "gen_size" in data: s.gen_size.setCurrentText(data["gen_size"])
             if "gen_n" in data: s.gen_n.setValue(data["gen_n"])
-            if "bfl_model" in data: s.bfl_model.setCurrentText(data["bfl_model"])
+            if "bfl_model" in data: s.bfl_endpoint.setCurrentText(data["bfl_model"])
                  
             self.append_log("Beállítások betöltve: settings.json")
             
@@ -1677,7 +1677,7 @@ class MainWindow(QMainWindow):
             "gen_provider_idx": s.gen_provider.currentIndex(),
             "gen_size": s.gen_size.currentText(),
             "gen_n": s.gen_n.value(),
-            "bfl_model": s.bfl_model.currentText(),
+            "bfl_model": s.bfl_endpoint.currentText(),
         }
         
         try:
