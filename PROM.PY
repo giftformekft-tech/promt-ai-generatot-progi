@@ -313,7 +313,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
 
         contour_instruction = ""
         if use_contour:
-            contour_instruction = "MUST include: clean continuous black contour around the artwork."
+            contour_instruction = "MUST include: bold black border around both the text and the graphic elements."
 
         system = (
             "Feladat: egy póló/pulcsi/mockup fotón látható NYOMAT alapján készíts EGY darab végleges képgeneráló promptot.\n"
