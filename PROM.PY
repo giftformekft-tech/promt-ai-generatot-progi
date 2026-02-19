@@ -966,6 +966,7 @@ class MainWindow(QMainWindow):
         self._results = {}
         self._image_urls = {}
         self.current_design_name = None
+        self.gen_queue = None
 
         root = QWidget()
         self.setCentralWidget(root)
@@ -1439,6 +1440,7 @@ class MainWindow(QMainWindow):
 
     def process_next_gen_item(self):
         if not self.gen_queue:
+            self.gen_queue = None  # Reset queue marker
             self.append_log("=== BULK GENERATION FINISHED ===")
             QMessageBox.information(self, "Kész", "Minden kijelölt kép generálása kész.")
             return
@@ -1557,8 +1559,9 @@ class MainWindow(QMainWindow):
         # For now, let's try to continue with next item after a short pause?
         # Or just stop. Let's stop to be safe, or user can restart.
         # Actually, let's try to proceed to next item in queue if queue exists
-        if hasattr(self, 'gen_queue') and self.gen_queue:
-            self.append_log("Hiba történt, de folytatom a következővel...")
+        # If in bulk mode, proceed
+        if self.gen_queue is not None:
+            self.append_log("Hiba történt a generálásnál, de folytatom a következő elemmel...")
             QTimer.singleShot(1000, self.process_next_gen_item)
         else:
             QMessageBox.critical(self, "Képgenerálás hiba", msg)
@@ -1589,7 +1592,9 @@ class MainWindow(QMainWindow):
         self.gen_bulk_btn.setEnabled(True)
         
         # Trigger next if in queue
-        if hasattr(self, 'gen_queue') and self.gen_queue:
+        # Trigger next if in bulk mode (queue is not None)
+        if self.gen_queue is not None:
+             self.append_log(f"Következő elem indítása 0.5mp múlva... (Queue: {len(self.gen_queue)})")
              QTimer.singleShot(500, self.process_next_gen_item)
 
     def resizeEvent(self, event):
