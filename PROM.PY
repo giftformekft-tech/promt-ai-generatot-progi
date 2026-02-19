@@ -273,17 +273,26 @@ def collect_card_images(
 
     return dedupe(urls)
 
-def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True) -> dict:
+def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True, bg_type="transparent") -> dict:
     img_data_url = download_image_as_data_url(image_url)
 
     if force_text:
+        # Background prompt logic
+        bg_instruction = "transparent background"
+        if bg_type == "white":
+            bg_instruction = "white background"
+        elif bg_type == "black":
+            bg_instruction = "black background"
+        elif bg_type == "none":
+            bg_instruction = "contextual background (fitting the theme)"
+
         system = (
             "Feladat: egy póló/pulcsi/mockup fotón látható NYOMAT alapján készíts EGY darab végleges képgeneráló promptot.\n"
             "\n"
             "KRITIKUS SZABÁLYOK:\n"
-            "1) A pólót/pulcsit/modellt/mockupot/hátteret IGNORÁLD. Ne írd le a ruhát, redőket, árnyékot, fotót.\n"
+            "1) A pólót/pulcsit/modellt/mockupot IGNORÁLD. Ne írd le a ruhát.\n"
             "2) CSAK a nyomat grafikáját írd le: illusztráció + tipográfia + kompozíció.\n"
-            "3) A prompt legyen print-ready: centered, clean design, transparent background.\n"
+            f"3) HÁTTÉR: {bg_instruction}.\n"
             "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan és tedd a promptba idézőjelek között.\n"
             "5) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
             "   TILOS bármilyen bizonytalanság jelölést beleírni a promptba (pl. UNCERTAIN, ?, brackets).\n"
@@ -294,7 +303,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            '  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: transparent background, centered composition, print-ready clean design, and TEXT: \\"LINE1\\\\nLINE2\\" (best-guess exact artwork text, NO uncertainty markers). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows, no background scene.",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, centered composition, print-ready clean design, and TEXT: \\"LINE1\\\\nLINE2\\" (best-guess exact artwork text, NO uncertainty markers). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'
@@ -552,6 +561,7 @@ class ImageCrawlWorker(QThread):
         force_text,
         extra_hosts,
         require_productish,
+        bg_type="transparent",
     ):
         super().__init__()
         self.api_key = api_key
@@ -566,6 +576,7 @@ class ImageCrawlWorker(QThread):
         self.force_text = force_text
         self.extra_hosts = extra_hosts
         self.require_productish = require_productish
+        self.bg_type = bg_type
         self._stop = False
 
     def stop(self):
@@ -637,7 +648,12 @@ class ImageCrawlWorker(QThread):
                     continue
 
                 self.log.emit(f"[{i}/{len(imgs)}] GPT: {img_url}")
-                data = gpt_single_prompt_from_image(client, img_url, force_text=self.force_text)
+                data = gpt_single_prompt_from_image(
+                    client, 
+                    img_url, 
+                    force_text=self.force_text, 
+                    bg_type=self.bg_type
+                )
 
                 self.save_cache(img_url, data)
                 with open(out_file, "w", encoding="utf-8") as f:
@@ -819,6 +835,12 @@ class MainWindow(QMainWindow):
         self.force_text_cb = QCheckBox("Szöveg kiolvasása és beírása a promptba (FONTOS)")
         self.force_text_cb.setChecked(True)
         row5.addWidget(self.force_text_cb)
+        
+        row5.addWidget(QLabel("Prompt háttér:"))
+        self.bg_combo = QComboBox()
+        self.bg_combo.addItems(["Transzparens (default)", "Fehér", "Fekete", "Nincs megkötés"])
+        self.bg_combo.setToolTip("A promptba épített utasítás a háttérre vonatkozóan.")
+        row5.addWidget(self.bg_combo)
 
         layout.addLayout(row5)
 
@@ -1019,6 +1041,13 @@ class MainWindow(QMainWindow):
         self.bfl_safety.setEnabled(not is_openai)
         self.bfl_timeout.setEnabled(not is_openai)
 
+    def get_bg_type_code(self):
+        idx = self.bg_combo.currentIndex()
+        if idx == 1: return "white"
+        if idx == 2: return "black"
+        if idx == 3: return "none"
+        return "transparent"
+
     # ----- Prompt crawl -----
     def start(self):
         seed = self.seed_edit.text().strip()
@@ -1042,6 +1071,7 @@ class MainWindow(QMainWindow):
             force_text=self.force_text_cb.isChecked(),
             extra_hosts=self.extra_hosts_edit.text(),
             require_productish=self.require_productish_cb.isChecked(),
+            bg_type=self.get_bg_type_code(),
         )
         self.worker.log.connect(self.append_log)
         self.worker.done.connect(self.on_done)
