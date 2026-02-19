@@ -1,0 +1,25 @@
+{
+  "prompt": "Centered, print-ready clean vector-style sports sticker artwork on a vibrant hot pink solid background; thick black contour around the artwork (sticker style). Illustration: two golden-yellow Muay Thai hand wraps/fists facing inward with knuckles showing, bold graphic linework, strong highlights and subtle shading, positioned beneath a single gold star and framed by a distressed red semicircular brush-stroke arc above the fists. Typography and layout: TEXT: \"MUAY THAI\" above \"KID\" in a single stacked composition, using a condensed, blocky, angular vintage athletic display font with Thai-inspired letterforms and heavy geometric serifs, gold gradient fill with subtle metallic sheen and darker gold shading, tight letterspacing, slight distressed texture for grit, perfectly centered under the fists. Overall composition: emblem-style centered badge, high-contrast, minimal extras, clean vector edges, sticker-ready thick black outline surrounding the entire artwork. Isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "mockup, shirt, t-shirt, hoodie, garment, fabric, model, photo, realistic lighting, background texture, shadows, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "bold",
+    "graphic",
+    "sticker",
+    "sports logo",
+    "vintage athletic",
+    "clean vector",
+    "emblem"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "gold / yellow",
+    "black",
+    "red",
+    "dark gold shading"
+  ],
+  "debug": {
+    "extracted_text_raw": "MUAY THAI KID",
+    "confidence": "medium",
+    "notes": "Top line appears as stylized MUAYTHAI; spacing between MUAY and THAI could be combined or separated in the original art. Letterforms are heavily stylized but clearly read as MUAY THAI above KID."
+  }
+}

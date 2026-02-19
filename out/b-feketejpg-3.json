@@ -1,0 +1,33 @@
+{
+  "prompt": "Centered, print-ready cartoon sticker illustration on a vibrant hot pink solid background, with a thick black contour around the artwork (sticker style), isolated artwork only; no garment, no mockup, no fabric, no shadows. Main illustration: a cheerful bearded fisherman holding a fishing rod with a lively green bass leaping toward the hook while he holds a frothy beer mug, set inside a circular badge with sun, water ripples and reeds; bold clean vector lines, flat bright colors, minimal cel shading, high-contrast and crisp edges. Typography: bold rounded display type with heavy outer stroke, subtle inner highlight and playful cartoon letterforms; top arched headline and bottom curved banner treatment. TEXT: \"CSAK EGY KAPÁS\" (above) \"VÁLASZT EL A BOLDOGSÁGTÓL\". Composition: perfectly centered, balanced hierarchy, scalable vector look, print-ready clean design, no additional background elements.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no shadows, no models, no photography, no extra background, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "cartoon illustration",
+    "sticker style",
+    "bold outline",
+    "vector",
+    "flat colors",
+    "playful",
+    "badge design",
+    "print-ready",
+    "clean lines",
+    "cel shading"
+  ],
+  "colors": [
+    "hot pink (background)",
+    "turquoise",
+    "sky blue",
+    "lime green",
+    "yellow",
+    "orange",
+    "brown",
+    "cream",
+    "black",
+    "white"
+  ],
+  "debug": {
+    "extracted_text_raw": "CSAK EGY KAPÁS VÁLASZT EL A BOLDOGSÁGTÓL",
+    "confidence": "high",
+    "notes": "The Hungarian phrase is legible across the top and bottom arcs: 'CSAK EGY KAPÁS' on top and 'VÁLASZT EL A BOLDOGSÁGTÓL' on the bottom. Diacritics (Á, Ó) are present in the source and included here."
+  }
+}

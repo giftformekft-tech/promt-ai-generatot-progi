@@ -1,0 +1,27 @@
+{
+  "prompt": "Centered print artwork on a vibrant hot pink solid background, isolated artwork only; no garment, no mockup, no fabric, no shadows. Sticker-style design with a thick black contour around the entire artwork. Dynamic, centered composition: a dramatic tri-portrait montage of the same soccer player rendered as stylized photorealistic illustrations with red and black paint-splatter and halftone bursts behind them. Bold, energetic typography layered on top: TEXT: \"GOAT\" above \"Cristiano Ronaldo\" above \"Ronaldo 7\" — \"GOAT\" in rough handwritten brush script, all caps, white with subtle red splatter and a thin inner black stroke; main headline \"Cristiano Ronaldo\" in large white brush-script with heavy brush textures, slight rightward slant, high contrast and rough ink edges for a graffiti/street-art feel; small supporting \"Ronaldo 7\" in condensed athletic sans-serif, red with black outline, placed near the left portrait like a jersey label. Add a small stylized CR7 emblem/sketch integrated near the lower-left of the composition. Overall print-ready clean design, limited palette (white, red, black) with distressed paint accents, crisp vector-friendly edges, high-contrast layers, ready for screenprinting, centered composition, thick black outer sticker contour.",
+  "negative_prompt": "no mockup, no garment, no photography, no fabric texture, no background scenery, no shadows, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "bold brush script",
+    "handwritten brush",
+    "photorealistic portrait illustration",
+    "grunge paint splatter",
+    "halftone burst",
+    "sticker style",
+    "print-ready",
+    "vector-friendly",
+    "high-contrast"
+  ],
+  "colors": [
+    "vibrant hot pink",
+    "black",
+    "white",
+    "red",
+    "dark gray"
+  ],
+  "debug": {
+    "extracted_text_raw": "GOAT; Cristiano Ronaldo; Ronaldo 7 (also small CR7 emblem/sketch)",
+    "confidence": "medium",
+    "notes": "Main large script clearly reads 'Cristiano Ronaldo'. Top handwritten word reads 'GOAT'. Small red text near left portrait appears to be 'Ronaldo 7' and there is a small CR7-style emblem/sketch; the small jersey text and emblem are partially overlapped by graphics which creates moderate uncertainty."
+  }
+}

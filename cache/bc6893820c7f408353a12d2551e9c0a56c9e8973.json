@@ -1,0 +1,29 @@
+{
+  "prompt": "Print-ready isolated sticker-style artwork on a vibrant hot pink solid background. MUST include: thick black contour around the artwork (sticker style). Centered composition, print-ready clean design. Illustration: a joyful cheering raccoon in mid-foreground with raised arms and an open smiling mouth, stylized painterly/vector fur texture in muted browns and grays with crisp highlights and simplified flat shadow planes for easy screen printing. Behind the raccoon: energetic radial comic-burst rays, ink-splash and star-sparkle accents in cyan and black to create dynamic contrast. Typography and layout: bold chunky rounded uppercase display type reading TEXT: \"PEDRO\" (above) \"PEDRO\" (the top word slightly arched over the raccoon head, the bottom word anchored beneath the raccoon), letters oversized and slightly irregular for a hand-drawn playful feel, color-block fills in turquoise, warm yellow and coral with soft inner highlights and subtle inset shadows, heavy black outline on each letter matching the sticker contour. Graphic details: clean vector edges, limited flat color palette, subtle halftone texture in the burst areas, tiny white highlight speckles, balanced negative space and perfect alignment for print. Explicit: isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no clothing, no fabric texture, no model, no photograph, no background scenery, no realistic lighting, no wrinkles, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "pop-art",
+    "retro comic",
+    "vector illustration",
+    "sticker style",
+    "screen-print ready",
+    "playful",
+    "bold typography",
+    "hand-drawn feel"
+  ],
+  "colors": [
+    "vibrant hot pink",
+    "cyan / turquoise",
+    "coral red",
+    "warm yellow",
+    "black",
+    "white",
+    "muted brown",
+    "gray"
+  ],
+  "debug": {
+    "extracted_text_raw": "PEDRO above PEDRO",
+    "confidence": "high",
+    "notes": "Both top and bottom words read clearly as 'PEDRO' in large uppercase letters; layout shows one 'PEDRO' arched above the raccoon and another 'PEDRO' anchored below."
+  }
+}

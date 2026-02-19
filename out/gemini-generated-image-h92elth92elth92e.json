@@ -1,0 +1,25 @@
+{
+  "prompt": "Centered, print-ready clean design on a vibrant hot pink solid background, isolated artwork only; no garment, no mockup, no fabric, no shadows. Thick black contour around the artwork (sticker style). Bold, hand-drawn cartoon illustration of a weary, slightly sarcastic rooster standing centered holding a steaming coffee mug in one wing, warm textured flat colors, clean vector-ready outlines, subtle distressed texture on fills. Typographic composition integrated with the illustration: TEXT: \"NEM BÍRSZ? HÚZZ EL\" above \"PROBLÉMA MEGOLDVA.\" Use large, condensed, all-caps display type with heavy weight, rough/distressed speckled texture, dark brown fill and subtle off-white highlights, tight tracking and strong horizontal alignment; the top two-phrase headline sits above the rooster and the bottom caption sits below the rooster, all centered. Overall aesthetic: retro sticker/vintage poster, bold black ink outlines, clean separations for screen printing, minimal gradients, high contrast, balanced negative space, isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no shadows, no photo realism, no background elements, no watermark, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "bold cartoon",
+    "vintage distressed",
+    "sticker style",
+    "hand-drawn illustration",
+    "print-ready vector"
+  ],
+  "colors": [
+    "vibrant hot pink background",
+    "dark brown text",
+    "burnt orange",
+    "golden yellow",
+    "cream highlights",
+    "black outline",
+    "white speckles"
+  ],
+  "debug": {
+    "extracted_text_raw": "NEM BÍRSZ? HÚZZ EL PROBLÉMA MEGOLDVA.",
+    "confidence": "high",
+    "notes": "Image shows three text lines: top 'NEM BÍRSZ?' then large 'HÚZZ EL' then bottom 'PROBLÉMA MEGOLDVA.' Diacritics (Í, Ú, É) are present and legible; spacing/word breaks are clear."
+  }
+}

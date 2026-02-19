@@ -1,0 +1,27 @@
+{
+  "prompt": "Centered print-ready clean vector sticker artwork on a vibrant hot pink solid background, with a thick black contour around the entire artwork (sticker style). Isolated artwork only; no garment, no mockup, no fabric, no shadows. Illustration: a cute kawaii round green cactus with a friendly smiling face, small rosy cheeks, glossy highlights, a small pink flower on top, short stylized white spikes and tiny green triangular confetti around it, sitting on a simple flat brown oval ground. Surrounding graphics: small white sparkles and green accent shapes to add playful energy. Typography and layout: bold, playful rounded all-caps sans fonts with strong weight and high legibility; primary headline text uses chunky green letters with a subtle lime-to-dark-green gradient, white inner highlight, and a thick black stroke, secondary lines use bold white caps with slight tracking; overall composition centered and balanced, with clear size hierarchy so the word KAKTUSZ is the largest, TÜRELEM and JUTOTT are prominent white caps, and RÓZSÁT TEREM arcs above the cactus. TEXT: \"TÜRELEM\" above \"RÓZSÁT TEREM\" above \"NEKEM\" above \"KAKTUSZ\" above \"JUTOTT\". Print-ready flat colors, crisp edges, high contrast, vector-friendly, sticker-ready thick black outer contour, isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "photo, mockup, t-shirt, garment, fabric, model, human, shadow, background texture, watermark, low-res, blurry, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "cute kawaii",
+    "sticker",
+    "vector illustration",
+    "bold outline",
+    "playful typography",
+    "clean flat colors",
+    "print-ready"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "lime green",
+    "dark green",
+    "black",
+    "white",
+    "brown",
+    "soft pink (flower)"
+  ],
+  "debug": {
+    "extracted_text_raw": "TÜRELEM RÓZSÁT TEREM NEKEM KAKTUSZ JUTOTT",
+    "confidence": "high",
+    "notes": "All-uppercase Hungarian text with diacritics (Ü, Ó, Á). Layout shows TÜRELEM at top, RÓZSÁT TEREM arched above the cactus, then NEKEM above large KAKTUSZ, and JUTOTT at bottom."
+  }
+}
