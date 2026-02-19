@@ -1,26 +1,25 @@
 {
-  "prompt": "Isolated print artwork on a vibrant hot pink solid background, centered composition, print-ready clean vector design: three stylized anime-inspired sailor silhouettes in dynamic poses connected by a sweeping shooting-star arc above them, illustrated as flat silhouettes filled with a neon cyan-to-electric magenta gradient and bright purple accents; thick black contour around the artwork (sticker style) hugging the entire illustration and text; bold geometric futuristic sans-serif typography TEXT: \"HUNTRX\" positioned below the silhouettes sitting on a thin horizontal base line, the wordmark using the same cyan-to-magenta gradient, heavy weight, squared terminals, slight negative cutouts echoing the silhouettes, kerning tight and balanced to the composition; composition centered, high contrast, minimal fine detail, crisp vector edges, halftone-free, layered for screen printing, isolated artwork only; no garment, no mockup, no fabric, no shadows.",
-  "negative_prompt": "garment, shirt, hoodie, mockup, fabric, wrinkles, photo, shadows, background texture, people, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "A bold, print-ready vector illustration centered on a vibrant hot pink solid background. Clean continuous black contour around the entire artwork, even-weight stroke. Graphic: three stylized dynamic silhouettes in a heroic trio pose, connected by a sweeping crescent arc that trails into a small star at the right tip; silhouettes rendered as crisp, high-contrast shapes filled with a smooth cyan-to-magenta-to-purple gradient, with minimal internal detail to preserve a billboard-friendly silhouette look. Typography and layout: large geometric futuristic sans wordmark centered beneath the figures reading TEXT English: \"HUNTRX\", matching the same cyan-magenta gradient, tight tracking, strong horizontal baseline, angular cuts and custom negative-space details on the letters to emphasize a tech/sci-fi aesthetic. Composition: balanced stacked layout with figures above and wordmark below, all elements aligned to center, generous clear space for printing. Finish: flat, clean, print-ready design with no textures, no drop shadows; isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no fabric, no shadows, no photography, no background textures, no watermarks, no extra text, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "synthwave",
-    "retro-futuristic",
     "vector",
-    "sticker",
+    "retro-futuristic",
     "silhouette",
-    "anime-inspired",
     "clean",
-    "bold"
+    "bold",
+    "print-ready"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "neon cyan",
-    "electric magenta",
-    "bright purple",
-    "black (thick contour)"
+    "cyan",
+    "electric blue",
+    "magenta",
+    "purple gradient",
+    "black (contour)"
   ],
   "debug": {
     "extracted_text_raw": "HUNTRX",
-    "confidence": "medium",
-    "notes": "The stylized wordmark appears as H U N T R X; the fifth character is slightly stylized and could be mistaken for a similar letter, but overall shape reads as 'R' and the final character is clearly an X."
+    "confidence": "high",
+    "notes": "Text appears as a single geometric wordmark 'HUNTRX' in capital letters with stylized angular cuts; last two characters form a distinctive R and X treatment but remain legible as 'RX'."
   }
 }

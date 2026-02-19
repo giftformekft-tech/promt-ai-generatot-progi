@@ -971,172 +971,48 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(root)
         layout = QVBoxLayout(root)
 
-        # API key row
-        row0 = QHBoxLayout()
-        row0.addWidget(QLabel("OpenAI API kulcs:"))
-        self.key_edit = QLineEdit(OPENAI_API_KEY)
-        self.key_edit.setEchoMode(QLineEdit.Password)
-        self.key_edit.setPlaceholderText("OPENAI_API_KEY (env) vagy ide írd be…")
-        row0.addWidget(self.key_edit)
-        layout.addLayout(row0)
+        # =======================================================
+        # LAYOUT REFACTOR
+        # LEFT SIDE (Main Content): Results, Prompt View
+        # RIGHT SIDE (Control Panel): Inputs, Settings, Buttons, Gen Box, Log
+        # =======================================================
 
-        # Input Tabs (URL vs File)
-        self.input_tabs = QTabWidget()
-        
-        # Tab 1: Web
-        tab_web = QWidget()
-        web_layout = QVBoxLayout(tab_web)
-        
-        row1 = QHBoxLayout()
-        row1.addWidget(QLabel("Weboldal URL:"))
-        self.seed_edit = QLineEdit()
-        self.seed_edit.setPlaceholderText("https://polomania.hu/piacter/tag/januar1")
-        row1.addWidget(self.seed_edit)
-        web_layout.addLayout(row1)
-        
-        # Tab 2: Helyi fájlok
-        tab_local = QWidget()
-        local_layout = QVBoxLayout(tab_local)
-        
-        row_local = QHBoxLayout()
-        self.local_files_btn = QPushButton("Képfájlok kiválasztása (JPG, PNG, WEBP)...")
-        self.local_files_btn.clicked.connect(self.pick_local_files)
-        self.local_files_label = QLabel("Nincs fájl kiválasztva")
-        row_local.addWidget(self.local_files_btn)
-        row_local.addWidget(self.local_files_label)
-        local_layout.addLayout(row_local)
-        
-        self.selected_files = []
+        # --- LEFT PANEL USER INTERFACE ---
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
 
-        self.input_tabs.addTab(tab_web, "Weboldal szkennelés")
-        self.input_tabs.addTab(tab_local, "Helyi fájlok")
-        
-        layout.addWidget(self.input_tabs)
-
-        # Output dir
-        row2 = QHBoxLayout()
-        row2.addWidget(QLabel("Kimenet mappa (prompt JSON):"))
-        self.out_edit = QLineEdit(os.path.abspath("out"))
-        btn_out = QPushButton("Tallóz…")
-        btn_out.clicked.connect(self.pick_out_dir)
-        row2.addWidget(self.out_edit)
-        row2.addWidget(btn_out)
-        layout.addLayout(row2)
-
-        # Cache dir
-        row3 = QHBoxLayout()
-        row3.addWidget(QLabel("Cache mappa:"))
-        self.cache_edit = QLineEdit(os.path.abspath("cache"))
-        btn_cache = QPushButton("Tallóz…")
-        btn_cache.clicked.connect(self.pick_cache_dir)
-        row3.addWidget(self.cache_edit)
-        row3.addWidget(btn_cache)
-        layout.addLayout(row3)
-
-        # Settings
-        row4 = QHBoxLayout()
-
-        row4.addWidget(QLabel("Max kép:"))
-        self.max_items = QSpinBox()
-        self.max_items.setRange(1, 100000)
-        self.max_items.setValue(200)
-        row4.addWidget(self.max_items)
-
-        row4.addWidget(QLabel("Delay (ms):"))
-        self.delay_ms = QSpinBox()
-        self.delay_ms.setRange(0, 60000)
-        self.delay_ms.setValue(900)
-        row4.addWidget(self.delay_ms)
-
-        row4.addWidget(QLabel("Scroll körök:"))
-        self.scroll_rounds = QSpinBox()
-        self.scroll_rounds.setRange(1, 200)
-        self.scroll_rounds.setValue(12)
-        row4.addWidget(self.scroll_rounds)
-
-        layout.addLayout(row4)
-
-        # Filters + options
-        row5 = QHBoxLayout()
-        self.headless_cb = QCheckBox("Headless (háttérben fusson a böngésző)")
-        self.headless_cb.setChecked(True)
-        row5.addWidget(self.headless_cb)
-
-        self.force_text_cb = QCheckBox("Szöveg kiolvasása és beírása a promptba (FONTOS)")
-        self.force_text_cb.setChecked(True)
-        row5.addWidget(self.force_text_cb)
-        
-        row5.addWidget(QLabel("Prompt háttér:"))
-        self.bg_combo = QComboBox()
-        self.bg_combo.addItems([
-            "Transzparens / Izolált (default)", 
-            "Fehér", 
-            "Fekete", 
-            "Neon Zöld (Green Screen)", 
-            "Hot Pink", 
-            "Nincs megkötés"
-        ])
-        self.bg_combo.setToolTip("A promptba épített utasítás a háttérre vonatkozóan.")
-        row5.addWidget(self.bg_combo)
-        
-        self.contour_cb = QCheckBox("Fekete kontúr")
-        self.contour_cb.setToolTip("Sticker style: vastag fekete körvonal a minta körül.")
-        row5.addWidget(self.contour_cb)
-
-        layout.addLayout(row5)
-
-        row6 = QHBoxLayout()
-        row6.addWidget(QLabel("Kép URL szűrő (path contains):"))
-        self.path_filter_edit = QLineEdit("")
-        self.path_filter_edit.setToolTip("Polomania esetén pl: /images/designs/ | Lolmarkt-nál hagyd üresen.")
-        row6.addWidget(self.path_filter_edit)
-        layout.addLayout(row6)
-
-        row7 = QHBoxLayout()
-        row7.addWidget(QLabel("Extra allowed hosts (CSV):"))
-        self.extra_hosts_edit = QLineEdit("lolmarkt.cdn.shoprenter.hu")
-        self.extra_hosts_edit.setToolTip("Vesszővel: pl. lolmarkt.cdn.shoprenter.hu,cdn2.valami.hu")
-        row7.addWidget(self.extra_hosts_edit)
-
-        self.require_productish_cb = QCheckBox("Csak 'product jellegű' képek (class/alt heurisztika)")
-        self.require_productish_cb.setChecked(True)
-        row7.addWidget(self.require_productish_cb)
-        layout.addLayout(row7)
-
-        # Buttons
-        row_btn = QHBoxLayout()
-        self.start_btn = QPushButton("START (Prompt gyártás)")
-        self.stop_btn = QPushButton("STOP")
-        self.stop_btn.setEnabled(False)
-        self.start_btn.clicked.connect(self.start)
-        self.stop_btn.clicked.connect(self.stop)
-        row_btn.addWidget(self.start_btn)
-        row_btn.addWidget(self.stop_btn)
-        layout.addLayout(row_btn)
-
-        # Splitter: LOG + RESULTS VIEWER
-        splitter = QSplitter(Qt.Horizontal)
-
-        self.log = QTextEdit()
-        self.log.setReadOnly(True)
-        self.log.setMinimumWidth(520)
-        splitter.addWidget(self.log)
-
-        right = QWidget()
-        right_layout = QVBoxLayout(right)
-
-        right_layout.addWidget(QLabel("Elkészült elemzések (dupla katt = prompt másolás):"))
+        left_layout.addWidget(QLabel("Elkészült elemzések (dupla katt = prompt másolás):"))
         self.result_list = QListWidget()
         self.result_list.currentItemChanged.connect(self.on_result_selected)
         self.result_list.itemDoubleClicked.connect(self.copy_prompt_of_item)
-        right_layout.addWidget(self.result_list)
+        left_layout.addWidget(self.result_list)
 
-        right_layout.addWidget(QLabel("Prompt nézet (ezt használja a képgenerálás is):"))
+        left_layout.addWidget(QLabel("Prompt nézet (ezt használja a képgenerálás is):"))
         self.prompt_view = QTextEdit()
         self.prompt_view.setReadOnly(False)
         self.prompt_view.setPlaceholderText("Kattints egy elemre a listában… vagy írj be saját promptot…")
-        right_layout.addWidget(self.prompt_view)
+        left_layout.addWidget(self.prompt_view)
 
+        # --- RIGHT PANEL USER INTERFACE ---
+        right_widget = QWidget()
+        right_layout = QVBoxLayout(right_widget)
+        
+        # 1. Input Tab (Top)
+        right_layout.addWidget(self.input_tabs)
+        
+        # 2. Settings Rows (Middle)
+        right_layout.addLayout(row0) # API Key
+        right_layout.addLayout(row2) # Out dir
+        right_layout.addLayout(row3) # Cache dir
+        right_layout.addLayout(row4) # Max items, Delay, Scroll
+        right_layout.addLayout(row5) # Headless, Text, BG, Contour
+        right_layout.addLayout(row6) # Path filter
+        right_layout.addLayout(row7) # Extra hosts, Productish
+        
+        # 3. Control Buttons
+        right_layout.addLayout(row_btn)
+
+        # 4. Image Generation Panel (Gen Box)
         # --- Image generation panel ---
         gen_box = QGroupBox("Képgenerálás")
         gen_layout = QVBoxLayout(gen_box)
@@ -1171,17 +1047,29 @@ class MainWindow(QMainWindow):
 
         self.preview = QLabel("Előnézet: (generálás után itt megjelenik)")
         self.preview.setAlignment(Qt.AlignCenter)
-        self.preview.setMinimumHeight(350)
+        self.preview.setMinimumHeight(250)
         self.preview.setStyleSheet("border: 1px solid #444; background: #222;")
         gen_layout.addWidget(self.preview)
 
         right_layout.addWidget(gen_box)
 
-        splitter.addWidget(right)
-        splitter.setSizes([600, 520])
+        # 5. Log (Bottom)
+        self.log = QTextEdit()
+        self.log.setReadOnly(True)
+        # self.log.setMinimumWidth(300) # Removed fixed min width constraint
+        right_layout.addWidget(self.log)
 
+        # --- SPLITTER SETUP ---
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.addWidget(left_widget)  # RESULTS & PROMPTS (BIG)
+        splitter.addWidget(right_widget) # CONTROLS (SMALL)
+        
+        # Set initial sizes (approx 70% left, 30% right)
+        splitter.setSizes([900, 380])
+        
         layout.addWidget(splitter)
-        self.resize(1280, 860)
+        self.resize(1380, 900)
+
 
     # ----- UI helpers -----
     def open_gen_settings(self):
