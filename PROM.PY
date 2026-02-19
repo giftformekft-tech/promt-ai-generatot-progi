@@ -273,7 +273,7 @@ def collect_card_images(
 
     return dedupe(urls)
 
-def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True, bg_type="transparent") -> dict:
+def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True, bg_type="transparent", use_contour=False) -> dict:
     img_data_url = download_image_as_data_url(image_url)
 
     if force_text:
@@ -286,13 +286,17 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
         elif bg_type == "none":
             bg_instruction = "contextual background (fitting the theme)"
 
+        contour_instruction = ""
+        if use_contour:
+            contour_instruction = "MUST include: thick black contour around the artwork (sticker style)."
+
         system = (
             "Feladat: egy póló/pulcsi/mockup fotón látható NYOMAT alapján készíts EGY darab végleges képgeneráló promptot.\n"
             "\n"
             "KRITIKUS SZABÁLYOK:\n"
             "1) A pólót/pulcsit/modellt/mockupot IGNORÁLD. Ne írd le a ruhát.\n"
             "2) CSAK a nyomat grafikáját írd le: illusztráció + tipográfia + kompozíció.\n"
-            f"3) HÁTTÉR: {bg_instruction}.\n"
+            f"3) HÁTTÉR: {bg_instruction}. {contour_instruction}\n"
             "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan és tedd a promptba idézőjelek között.\n"
             "5) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
             "   TILOS bármilyen bizonytalanság jelölést beleírni a promptba (pl. UNCERTAIN, ?, brackets).\n"
@@ -303,7 +307,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, centered composition, print-ready clean design, and TEXT: \\"LINE1\\\\nLINE2\\" (best-guess exact artwork text, NO uncertainty markers). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} centered composition, print-ready clean design, and TEXT: \\"LINE1\\\\nLINE2\\" (best-guess exact artwork text, NO uncertainty markers). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'
@@ -562,6 +566,7 @@ class ImageCrawlWorker(QThread):
         extra_hosts,
         require_productish,
         bg_type="transparent",
+        use_contour=False,
     ):
         super().__init__()
         self.api_key = api_key
@@ -577,6 +582,7 @@ class ImageCrawlWorker(QThread):
         self.extra_hosts = extra_hosts
         self.require_productish = require_productish
         self.bg_type = bg_type
+        self.use_contour = use_contour
         self._stop = False
 
     def stop(self):
@@ -652,7 +658,8 @@ class ImageCrawlWorker(QThread):
                     client, 
                     img_url, 
                     force_text=self.force_text, 
-                    bg_type=self.bg_type
+                    bg_type=self.bg_type,
+                    use_contour=self.use_contour
                 )
 
                 self.save_cache(img_url, data)
@@ -841,6 +848,10 @@ class MainWindow(QMainWindow):
         self.bg_combo.addItems(["Transzparens (default)", "Fehér", "Fekete", "Nincs megkötés"])
         self.bg_combo.setToolTip("A promptba épített utasítás a háttérre vonatkozóan.")
         row5.addWidget(self.bg_combo)
+        
+        self.contour_cb = QCheckBox("Fekete kontúr")
+        self.contour_cb.setToolTip("Sticker style: vastag fekete körvonal a minta körül.")
+        row5.addWidget(self.contour_cb)
 
         layout.addLayout(row5)
 
@@ -1072,6 +1083,7 @@ class MainWindow(QMainWindow):
             extra_hosts=self.extra_hosts_edit.text(),
             require_productish=self.require_productish_cb.isChecked(),
             bg_type=self.get_bg_type_code(),
+            use_contour=self.contour_cb.isChecked(),
         )
         self.worker.log.connect(self.append_log)
         self.worker.done.connect(self.on_done)
