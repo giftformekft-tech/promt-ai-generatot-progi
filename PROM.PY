@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSpinBox, QTextEdit, QFileDialog,
     QMessageBox, QCheckBox, QListWidget, QListWidgetItem, QSplitter,
-    QComboBox, QGroupBox, QFormLayout
+    QComboBox, QGroupBox, QFormLayout, QTabWidget
 )
 
 # =============================
@@ -116,6 +116,27 @@ def parse_srcset(srcset: str, base_url: str) -> list[str]:
             continue
         out.append(urljoin(base_url, url_part))
     return out
+
+def get_data_url(source: str) -> str:
+    """
+    Kép betöltése data URL-ként (http URL vagy helyi fájl útvonal).
+    """
+    if source.lower().startswith("http"):
+        return download_image_as_data_url(source)
+    
+    # Local file
+    if not os.path.exists(source):
+        raise RuntimeError(f"Fájl nem található: {source}")
+    
+    mime_type = "image/jpeg"
+    ext = os.path.splitext(source)[1].lower()
+    if ext == ".png": mime_type = "image/png"
+    elif ext == ".webp": mime_type = "image/webp"
+    
+    with open(source, "rb") as f:
+        data = f.read()
+        b64 = base64.b64encode(data).decode("utf-8")
+        return f"data:{mime_type};base64,{b64}"
 
 def download_image_as_data_url(url: str) -> str:
     with httpx.Client(
@@ -274,7 +295,7 @@ def collect_card_images(
     return dedupe(urls)
 
 def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True, bg_type="transparent", use_contour=False) -> dict:
-    img_data_url = download_image_as_data_url(image_url)
+    img_data_url = get_data_url(image_url)
 
     if force_text:
         # Background prompt logic
@@ -563,10 +584,11 @@ class ImageCrawlWorker(QThread):
         scroll_rounds,
         path_filter,
         force_text,
-        extra_hosts,
-        require_productish,
-        bg_type="transparent",
-        use_contour=False,
+        extra_hosts: str,
+        require_productish: bool,
+        bg_type: str = "transparent",
+        use_contour: bool = False,
+        local_files: list[str] | None = None,
     ):
         super().__init__()
         self.api_key = api_key
@@ -583,6 +605,7 @@ class ImageCrawlWorker(QThread):
         self.require_productish = require_productish
         self.bg_type = bg_type
         self.use_contour = use_contour
+        self.local_files = local_files
         self._stop = False
 
     def stop(self):
@@ -608,16 +631,23 @@ class ImageCrawlWorker(QThread):
             client = make_client(self.api_key)
             ensure_dirs(self.out_dir, self.cache_dir)
 
-            self.log.emit(f"Seed: {self.seed_url}")
-            imgs = collect_card_images(
-                self.seed_url,
-                headless=self.headless,
-                scroll_rounds=self.scroll_rounds,
-                log_cb=lambda s: self.log.emit(s),
-                path_must_contain=self.path_filter.strip() if self.path_filter.strip() else None,
-                extra_allowed_hosts=self.extra_hosts.strip(),
-                require_productish=self.require_productish,
-            )
+            ensure_dirs(self.out_dir, self.cache_dir)
+
+            imgs = []
+            if self.local_files:
+                self.log.emit(f"Helyi fájlok feldolgozása: {len(self.local_files)} db")
+                imgs = self.local_files
+            else:
+                self.log.emit(f"Seed: {self.seed_url}")
+                imgs = collect_card_images(
+                    self.seed_url,
+                    headless=self.headless,
+                    scroll_rounds=self.scroll_rounds,
+                    log_cb=lambda s: self.log.emit(s),
+                    path_must_contain=self.path_filter.strip() if self.path_filter.strip() else None,
+                    extra_allowed_hosts=self.extra_hosts.strip(),
+                    require_productish=self.require_productish,
+                )
 
             if not imgs:
                 self.log.emit("0 kép találat. Tipp: növeld a scroll köröket vagy állítsd a host/path szűrőket.")
@@ -625,14 +655,20 @@ class ImageCrawlWorker(QThread):
                 return
 
             imgs = imgs[: self.max_items]
-            self.log.emit(f"Talált képek: {len(imgs)}")
+            self.log.emit(f"Feldolgozandó képek: {len(imgs)}")
 
             for i, img_url in enumerate(imgs, 1):
                 if self._stop:
                     self.log.emit("STOP – leállítva.")
                     break
 
-                name = safe_name_from_image_url(img_url)
+                if self.local_files:
+                    # Helyi fájl esetén a név a fájlnévből jön
+                    name = os.path.splitext(os.path.basename(img_url))[0]
+                    name = slugify(name)
+                else:
+                    name = safe_name_from_image_url(img_url)
+                
                 out_file = os.path.join(self.out_dir, name + ".json")
 
                 if os.path.exists(out_file):
@@ -782,13 +818,38 @@ class MainWindow(QMainWindow):
         row0.addWidget(self.key_edit)
         layout.addLayout(row0)
 
-        # Seed URL
+        # Input Tabs (URL vs File)
+        self.input_tabs = QTabWidget()
+        
+        # Tab 1: Web
+        tab_web = QWidget()
+        web_layout = QVBoxLayout(tab_web)
+        
         row1 = QHBoxLayout()
-        row1.addWidget(QLabel("Weboldal (tag/kategória URL):"))
+        row1.addWidget(QLabel("Weboldal URL:"))
         self.seed_edit = QLineEdit()
-        self.seed_edit.setPlaceholderText("https://polomania.hu/piacter/tag/januar1  |  https://lolmarkt.hu/...")
+        self.seed_edit.setPlaceholderText("https://polomania.hu/piacter/tag/januar1")
         row1.addWidget(self.seed_edit)
-        layout.addLayout(row1)
+        web_layout.addLayout(row1)
+        
+        # Tab 2: Helyi fájlok
+        tab_local = QWidget()
+        local_layout = QVBoxLayout(tab_local)
+        
+        row_local = QHBoxLayout()
+        self.local_files_btn = QPushButton("Képfájlok kiválasztása (JPG, PNG, WEBP)...")
+        self.local_files_btn.clicked.connect(self.pick_local_files)
+        self.local_files_label = QLabel("Nincs fájl kiválasztva")
+        row_local.addWidget(self.local_files_btn)
+        row_local.addWidget(self.local_files_label)
+        local_layout.addLayout(row_local)
+        
+        self.selected_files = []
+
+        self.input_tabs.addTab(tab_web, "Weboldal szkennelés")
+        self.input_tabs.addTab(tab_local, "Helyi fájlok")
+        
+        layout.addWidget(self.input_tabs)
 
         # Output dir
         row2 = QHBoxLayout()
@@ -1017,6 +1078,17 @@ class MainWindow(QMainWindow):
         self.resize(1280, 860)
 
     # ----- UI helpers -----
+    def pick_local_files(self):
+        files, _ = QFileDialog.getOpenFileNames(
+            self, "Képek kiválasztása", "", "Images (*.png *.jpg *.jpeg *.webp)"
+        )
+        if files:
+            self.selected_files = files
+            self.local_files_label.setText(f"{len(files)} fájl kiválasztva")
+        else:
+            self.selected_files = []
+            self.local_files_label.setText("Nincs fájl kiválasztva")
+
     def api_key(self) -> str:
         return self.key_edit.text().strip()
 
@@ -1061,10 +1133,21 @@ class MainWindow(QMainWindow):
 
     # ----- Prompt crawl -----
     def start(self):
-        seed = self.seed_edit.text().strip()
-        if not seed:
-            QMessageBox.warning(self, "Hiányzik", "Adj meg URL-t.")
-            return
+        is_local = (self.input_tabs.currentIndex() == 1)
+        seed = ""
+        local_files = None
+
+        if is_local:
+            if not self.selected_files:
+                QMessageBox.warning(self, "Hiányzik", "Válassz ki legalább egy képfájlt.")
+                return
+            local_files = self.selected_files
+        else:
+            seed = self.seed_edit.text().strip()
+            if not seed:
+                QMessageBox.warning(self, "Hiányzik", "Adj meg URL-t.")
+                return
+
         if not self.api_key():
             QMessageBox.critical(self, "Kulcs", "Hiányzik az OpenAI API kulcs (env vagy fenti mező).")
             return
@@ -1072,6 +1155,7 @@ class MainWindow(QMainWindow):
         self.worker = ImageCrawlWorker(
             api_key=self.api_key(),
             seed_url=seed,
+            local_files=local_files,
             out_dir=self.out_edit.text().strip(),
             cache_dir=self.cache_edit.text().strip(),
             max_items=int(self.max_items.value()),
