@@ -1,0 +1,22 @@
+{
+  "prompt": "A centered, print-ready artwork on a vibrant hot pink solid background. Bold black border around both the text and the graphic elements. High-contrast, hand-engraved style white illustration of a carp fish in the center with detailed scales, fins and highlights, rendered with crisp white fills and strong black linework; the entire fish illustration enclosed in a bold black outline. Large, uppercase, distressed brush-script typography in white with a thick black outline that matches the illustration border, arranged as TEXT Hungarian: \"EZ A NAPOM\" (above) \"FÉNYPONTJA\" (below). Top text slightly arched to follow the fish's top curve, bottom text slightly arched to follow the fish's lower curve; text tightly integrated with the fish but clearly separated by the black border. Clean, flat, vector-friendly composition, print-ready, no gradients, halftones or photographic textures; isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no shirt, no model, no photo, no background scene, no shadows, no wrinkles, no watermark, low resolution, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "hand-engraved illustration",
+    "realistic fish line art",
+    "distressed brush-script typography",
+    "high-contrast print",
+    "vintage angling badge",
+    "vector-ready"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "black (bold outlines and borders)",
+    "white (illustration and text fill)"
+  ],
+  "debug": {
+    "extracted_text_raw": "EZ A NAPOM FÉNYPONTJA",
+    "confidence": "medium",
+    "notes": "Top reads clearly as 'EZ A NAPOM'. Bottom word likely 'FÉNYPONTJA' (Hungarian for 'highlight'), but some characters near the middle/end are stylistically distressed and the printed sample image could be misread as alternative letters; the bottom letters were the main source of uncertainty."
+  }
+}

@@ -313,7 +313,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
 
         contour_instruction = ""
         if use_contour:
-            contour_instruction = "MUST include: bold black border around both the text and the graphic elements."
+            contour_instruction = "MUST include: thick black vector-style outline around the isolated elements (text and graphics) ONLY. Do NOT add a square frame or border around the entire image."
 
         system = (
             "Feladat: egy póló/pulcsi/mockup fotón látható NYOMAT alapján készíts EGY darab végleges képgeneráló promptot.\n"
@@ -1120,10 +1120,15 @@ class MainWindow(QMainWindow):
         btn_settings.clicked.connect(self.open_gen_settings)
         btn_row_gen.addWidget(btn_settings)
         
-        self.gen_btn = QPushButton("GENERATE IMAGE")
-        self.gen_btn.setStyleSheet("font-weight: bold; padding: 6px;")
+        self.gen_btn = QPushButton("SINGLE GEN")
+        self.gen_btn.setStyleSheet("padding: 6px;")
         self.gen_btn.clicked.connect(self.generate_image_clicked)
         btn_row_gen.addWidget(self.gen_btn)
+
+        self.gen_bulk_btn = QPushButton("BULK GEN (Selected)")
+        self.gen_bulk_btn.setStyleSheet("font-weight: bold; padding: 6px; background-color: #4CAF50; color: white;")
+        self.gen_bulk_btn.clicked.connect(self.start_bulk_generation)
+        btn_row_gen.addWidget(self.gen_bulk_btn)
         
         gen_layout.addLayout(btn_row_gen)
         
@@ -1375,69 +1380,54 @@ class MainWindow(QMainWindow):
         self.preview.setText("Generálás folyamatban…")
 
         if is_openai:
-            if not self.api_key():
-                QMessageBox.critical(self, "Kulcs", "Hiányzik az OpenAI API kulcs (env vagy fenti mező).")
-                self.gen_btn.setEnabled(True)
-                return
+            pass # We removed the old block, just flow through
 
-            quality = s.gen_quality.currentText()
-            transparent = s.gen_transparent.isChecked()
+        # Output dir
+        out_dir = self.gen_out_edit.text().strip()
+        if not out_dir:
+            out_dir = os.path.abspath("out_gen")
+            
+        custom_name = ""
+        if self.current_design_name:
+             # e.g. "b-sotetkek.jpg" -> "b-sotetkek"
+             root, _ = os.path.splitext(self.current_design_name)
+             custom_name = root
 
-            self.gen_worker = ImageGenWorker(
-                api_key=self.api_key(),
-                prompt=prompt,
-                out_dir=out_dir,
-                quality=quality,
-                size=size,
-                transparent=transparent,
-                n=n,
-                base_name=base_name
-            )
-            self.gen_worker.log.connect(self.append_log)
-            self.gen_worker.error.connect(self.on_image_gen_error)
-            self.gen_worker.done.connect(self.on_image_gen_done)
-            self.append_log("=== START (image gen / OpenAI) ===")
-            self.gen_worker.start()
-        else:
-            bfl_key = s.bfl_key.text().strip()
-            if not bfl_key:
-                QMessageBox.critical(self, "Kulcs", "Hiányzik a BFL API kulcs (BFL_API_KEY).")
-                self.gen_btn.setEnabled(True)
-                return
-
-            base_url = s.bfl_base_url.currentText().strip()
-            endpoint = s.bfl_endpoint.currentText().strip()
-            output_format = s.bfl_output_format.currentText().strip()
-            prompt_upsampling = s.bfl_prompt_upsampling.isChecked()
-            safety_tolerance = int(s.bfl_safety.value())
-            timeout_sec = int(s.bfl_timeout.value())
-
-            self.gen_worker = BFLImageGenWorker(
-                bfl_api_key=bfl_key,
-                prompt=prompt,
-                out_dir=out_dir,
-                base_url=base_url,
-                endpoint=endpoint,
-                size=size,
-                output_format=output_format,
-                n=n,
-                base_name=base_name,
-                prompt_upsampling=prompt_upsampling,
-                safety_tolerance=safety_tolerance,
-                timeout_sec=timeout_sec
-            )
-            self.gen_worker.log.connect(self.append_log)
-            self.gen_worker.error.connect(self.on_image_gen_error)
-            self.gen_worker.done.connect(self.on_image_gen_done)
-            self.append_log("=== START (image gen / BFL) ===")
-            self.gen_worker.start()
+        self.gen_worker = ImageGenWorker(
+            prompt=prompt,
+            provider=provider,
+            api_key=None, # Will be fetched from env/input inside worker or passed here
+            # We need to pass keys if not in env. 
+            # MainWindow has OPENAI_API_KEY from env, but let's pass it explicitly if user typed it
+            openai_key=self.key_edit.text().strip() or OPENAI_API_KEY,
+            bfl_key=BFL_API_KEY, # Env only for now or add field
+            out_dir=out_dir,
+            size=size,
+            bfl_model=bfl_model,
+            custom_name=custom_name
+        )
+        self.gen_worker.log.connect(self.append_log)
+        self.gen_worker.error.connect(self.on_image_gen_error)
+        self.gen_worker.done.connect(self.on_image_gen_done)
+        
+        self.gen_worker.start()
 
     def on_image_gen_error(self, msg: str):
         self.append_log("=== HIBA (image gen) ===")
         self.append_log(msg)
         self.gen_btn.setEnabled(True)
+        self.gen_bulk_btn.setEnabled(True)
         self.preview.setText("Előnézet: (hiba)")
-        QMessageBox.critical(self, "Képgenerálás hiba", msg)
+        
+        # If in bulk mode, we might want to continue or stop. 
+        # For now, let's try to continue with next item after a short pause?
+        # Or just stop. Let's stop to be safe, or user can restart.
+        # Actually, let's try to proceed to next item in queue if queue exists
+        if hasattr(self, 'gen_queue') and self.gen_queue:
+            self.append_log("Hiba történt, de folytatom a következővel...")
+            QTimer.singleShot(1000, self.process_next_gen_item)
+        else:
+            QMessageBox.critical(self, "Képgenerálás hiba", msg)
 
     def on_image_gen_done(self, paths: list):
         self.append_log("=== KÉSZ (image gen) ===")
@@ -1462,6 +1452,11 @@ class MainWindow(QMainWindow):
             self.preview.setText("Előnézet: nem jött kép.")
 
         self.gen_btn.setEnabled(True)
+        self.gen_bulk_btn.setEnabled(True)
+        
+        # Trigger next if in queue
+        if hasattr(self, 'gen_queue') and self.gen_queue:
+             QTimer.singleShot(500, self.process_next_gen_item)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

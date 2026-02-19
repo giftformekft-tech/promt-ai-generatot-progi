@@ -1,0 +1,28 @@
+{
+  "prompt": "Centered print-only artwork on a vibrant hot pink solid background, isolated artwork only; no garment, no mockup, no fabric, no shadows. Strong, clean, screen-print-friendly vector illustration: a cute smiling round cactus in a small brown pot with a pink flower on top, simplified highlights, symmetrical white spikes and small green confetti triangles and radiating accent marks around it. All graphic elements and all text must have a bold black border/outline. Typography and layout: playful chunky condensed rounded sans for headlines with heavy black outline, the main headline in large lime-green fill with subtle lighter highlight and slight inner contrast stroke, secondary lines in solid white or green with matching black outline, tight vertical stacking, top lines slightly arched to frame the cactus, centered composition, print-ready clean design, crisp edges, flat colors, minimal color separations, vector paths only. TEXT Hungarian: \"TÜRELEM\" (above) \"RÓZSÁT TEREM\" (above) \"NEKEM\" (below graphic) \"KAKTUSZ\" (below graphic, largest) \"JUTOTT\" (bottom). Isolated artwork only; no garment, no mockup, no fabric, no shadows.",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no folds, no shadows, no photography, no background elements, no watermark, no photo-realism, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "style_keywords": [
+    "cute cartoon",
+    "bold outline",
+    "flat vector",
+    "playful",
+    "sticker-style",
+    "screenprint-friendly",
+    "clean lines",
+    "centered composition"
+  ],
+  "colors": [
+    "vibrant hot pink (background)",
+    "lime green / bright green (main text fill)",
+    "dark green (cactus accents)",
+    "black (bold outlines)",
+    "white (secondary text/highlights)",
+    "soft brown (pot)",
+    "pink (flower)"
+  ],
+  "debug": {
+    "extracted_text_raw": "TÜRELEM RÓZSÁT TEREM NEKEM KAKTUSZ JUTOTT",
+    "confidence": "high",
+    "notes": "All words are clearly legible and match a common Hungarian phrase; diacritics visible (Ü, Ó). Layout appears as top arched 'TÜRELEM' and 'RÓZSÁT TEREM', cactus illustration in center, then stacked 'NEKEM' 'KAKTUSZ' (largest) 'JUTOTT' below."
+  }
+}
