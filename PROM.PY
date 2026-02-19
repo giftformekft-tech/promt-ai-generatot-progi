@@ -313,7 +313,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
 
         contour_instruction = ""
         if use_contour:
-            contour_instruction = "MUST include: thick black contour around the artwork (sticker style)."
+            contour_instruction = "MUST include: clean continuous black contour around the artwork."
 
         system = (
             "Feladat: egy póló/pulcsi/mockup fotón látható NYOMAT alapján készíts EGY darab végleges képgeneráló promptot.\n"
@@ -450,11 +450,27 @@ def bfl_headers(api_key: str) -> dict:
     return {"accept": "application/json", "x-key": api_key, "Content-Type": "application/json"}
 
 def size_to_dims_and_ar(size: str) -> tuple[int, int, str]:
-    if size == "1024x1536":
-        return 1024, 1536, "2:3"
-    if size == "1536x1024":
-        return 1536, 1024, "3:2"
-    return 1024, 1024, "1:1"
+    if not size or "x" not in size:
+        return 1024, 1024, "1:1"
+    
+    parts = size.lower().split("x")
+    try:
+        w = int(parts[0].strip())
+        h = int(parts[1].strip())
+    except ValueError:
+        return 1024, 1024, "1:1"
+
+    # Minimal logic for aspect ratio string (approx)
+    ratio = w / h
+    ar_str = "1:1"
+    if 0.6 < ratio < 0.7: ar_str = "2:3"
+    elif 1.4 < ratio < 1.6: ar_str = "3:2"
+    elif 0.5 < ratio < 0.6: ar_str = "9:16"
+    elif 1.7 < ratio < 1.8: ar_str = "16:9"
+    elif 0.7 < ratio < 0.8: ar_str = "3:4"
+    elif 1.2 < ratio < 1.4: ar_str = "4:3"
+    
+    return w, h, ar_str
 
 def bfl_submit_generation(
     prompt: str,
@@ -876,8 +892,8 @@ class ImageGenSettingsDialog(QDialog):
         form_layout.addRow("Timeout (sec):", self.bfl_timeout)
 
         self.gen_size = QComboBox()
-        self.gen_size.addItems(["1024x1024", "1024x1536", "1536x1024"])
-        self.gen_size.setCurrentText("1024x1024")
+        # Default starting items (will be updated by on_provider_changed)
+        self.gen_size.addItems(["1024x1024"]) 
         form_layout.addRow("Méret:", self.gen_size)
 
         self.gen_n = QSpinBox()
@@ -907,6 +923,38 @@ class ImageGenSettingsDialog(QDialog):
         self.bfl_prompt_upsampling.setEnabled(not is_openai)
         self.bfl_safety.setEnabled(not is_openai)
         self.bfl_timeout.setEnabled(not is_openai)
+
+        # Update resolutions based on provider
+        current_size = self.gen_size.currentText()
+        self.gen_size.clear()
+        
+        if is_openai:
+            # DALL-E 3 standard sizes
+            self.gen_size.addItems([
+                "1024x1024",
+                "1024x1792",
+                "1792x1024"
+            ])
+        else:
+            # BFL / Flux supported sizes
+            self.gen_size.addItems([
+                "1024x1024",   # Square
+                "768x1344",    # Mobile 9:16
+                "1344x768",    # Desktop 16:9
+                "1080x1920",   # FHD Portrait
+                "1920x1080",   # FHD Landscape
+                "1152x896",    # Landscape 4:3
+                "896x1152",    # Portrait 3:4
+                "1024x1536",   # Portrait 2:3
+                "1536x1024",   # Landscape 3:2
+            ])
+        
+        # Try to restore previous selection if it exists in new list
+        idx = self.gen_size.findText(current_size)
+        if idx >= 0:
+            self.gen_size.setCurrentIndex(idx)
+        else:
+            self.gen_size.setCurrentIndex(0)
 
 # ---------- UI ----------
 class MainWindow(QMainWindow):
