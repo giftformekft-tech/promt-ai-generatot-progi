@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 from openai import OpenAI
 from playwright.sync_api import sync_playwright
 
-from PySide6.QtCore import QThread, Signal, Qt
+from PySide6.QtCore import QThread, Signal, Qt, QTimer
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
