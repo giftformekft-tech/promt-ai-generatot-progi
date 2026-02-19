@@ -304,6 +304,10 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
             bg_instruction = "white background"
         elif bg_type == "black":
             bg_instruction = "black background"
+        elif bg_type == "neon_green":
+            bg_instruction = "bright neon green solid background (chroma key style)"
+        elif bg_type == "hot_pink":
+            bg_instruction = "vibrant hot pink solid background"
         elif bg_type == "none":
             bg_instruction = "contextual background (fitting the theme)"
 
@@ -318,7 +322,8 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
             "1) A pólót/pulcsit/modellt/mockupot IGNORÁLD. Ne írd le a ruhát.\n"
             "2) CSAK a nyomat grafikáját írd le: illusztráció + tipográfia + kompozíció.\n"
             f"3) HÁTTÉR: {bg_instruction}. {contour_instruction}\n"
-            "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan és tedd a promptba idézőjelek között.\n"
+            "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. FONTOS: NE használj '\\n' vagy sortörést a szövegben.\n"
+            "   Ehelyett írd le az elhelyezkedést: 'TEXT1' above 'TEXT2'.\n"
             "5) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
             "   TILOS bármilyen bizonytalanság jelölést beleírni a promptba (pl. UNCERTAIN, ?, brackets).\n"
             "   A bizonytalanságot kizárólag a debug mezőbe írd le.\n"
@@ -328,7 +333,7 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} centered composition, print-ready clean design, and TEXT: \\"LINE1\\\\nLINE2\\" (best-guess exact artwork text, NO uncertainty markers). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} centered composition, print-ready clean design, and TEXT: \\"LINE1\\" (above) ... (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'
@@ -906,7 +911,14 @@ class MainWindow(QMainWindow):
         
         row5.addWidget(QLabel("Prompt háttér:"))
         self.bg_combo = QComboBox()
-        self.bg_combo.addItems(["Transzparens (default)", "Fehér", "Fekete", "Nincs megkötés"])
+        self.bg_combo.addItems([
+            "Transzparens / Izolált (default)", 
+            "Fehér", 
+            "Fekete", 
+            "Neon Zöld (Green Screen)", 
+            "Hot Pink", 
+            "Nincs megkötés"
+        ])
         self.bg_combo.setToolTip("A promptba épített utasítás a háttérre vonatkozóan.")
         row5.addWidget(self.bg_combo)
         
@@ -1128,7 +1140,9 @@ class MainWindow(QMainWindow):
         idx = self.bg_combo.currentIndex()
         if idx == 1: return "white"
         if idx == 2: return "black"
-        if idx == 3: return "none"
+        if idx == 3: return "neon_green"
+        if idx == 4: return "hot_pink"
+        if idx == 5: return "none"
         return "transparent"
 
     # ----- Prompt crawl -----
