@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSpinBox, QTextEdit, QFileDialog,
     QMessageBox, QCheckBox, QListWidget, QListWidgetItem, QSplitter,
-    QComboBox, QGroupBox, QFormLayout, QTabWidget
+    QComboBox, QGroupBox, QFormLayout, QTabWidget, QDialog, QDialogButtonBox
 )
 
 # =============================
@@ -799,6 +799,115 @@ class BFLImageGenWorker(QThread):
         except Exception as e:
             self.error.emit(str(e))
 
+# ---------- UI: Settings Dialog ----------
+class ImageGenSettingsDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Képgenerálás Beállítások")
+        self.resize(500, 600)
+        
+        layout = QVBoxLayout(self)
+        
+        form_layout = QFormLayout()
+        
+        self.gen_provider = QComboBox()
+        self.gen_provider.addItems(["OpenAI (gpt-image-1.5)", "BFL (FLUX)"])
+        self.gen_provider.setCurrentIndex(0)
+        self.gen_provider.currentIndexChanged.connect(self.on_provider_changed)
+        form_layout.addRow("Provider:", self.gen_provider)
+
+        self.gen_quality = QComboBox()
+        self.gen_quality.addItems(["low", "medium", "high"])
+        self.gen_quality.setCurrentText("medium")
+        form_layout.addRow("Quality:", self.gen_quality)
+
+        self.gen_transparent = QCheckBox("Transzparens háttér (PNG)")
+        self.gen_transparent.setChecked(False)
+        form_layout.addRow("", self.gen_transparent)
+
+        self.bfl_key = QLineEdit(BFL_API_KEY)
+        self.bfl_key.setEchoMode(QLineEdit.Password)
+        self.bfl_key.setPlaceholderText("BFL_API_KEY (env) vagy ide írd be…")
+        form_layout.addRow("BFL API kulcs:", self.bfl_key)
+
+        self.bfl_base_url = QComboBox()
+        self.bfl_base_url.addItems([
+            "https://api.bfl.ai/v1",
+            "https://api.eu.bfl.ai/v1",
+            "https://api.us.bfl.ai/v1",
+        ])
+        self.bfl_base_url.setCurrentText(BFL_BASE_URL_DEFAULT)
+        form_layout.addRow("BFL base URL:", self.bfl_base_url)
+
+        self.bfl_endpoint = QComboBox()
+        self.bfl_endpoint.addItems([
+            "/flux-2-max",
+            "/flux-2-pro",
+            "/flux-2-flex",
+            "/flux-2-klein-4b",
+            "/flux-2-klein-9b",
+            "/flux-kontext-max",
+            "/flux-kontext-pro",
+            "/flux-pro-1.1-ultra",
+            "/flux-pro-1.1",
+            "/flux-pro",
+            "/flux-dev",
+        ])
+        self.bfl_endpoint.setCurrentText("/flux-pro-1.1")
+        form_layout.addRow("BFL endpoint:", self.bfl_endpoint)
+
+        self.bfl_output_format = QComboBox()
+        self.bfl_output_format.addItems(["png", "jpeg"])
+        self.bfl_output_format.setCurrentText("png")
+        form_layout.addRow("Output format:", self.bfl_output_format)
+
+        self.bfl_prompt_upsampling = QCheckBox("Prompt upsampling")
+        self.bfl_prompt_upsampling.setChecked(False)
+        form_layout.addRow("", self.bfl_prompt_upsampling)
+
+        self.bfl_safety = QSpinBox()
+        self.bfl_safety.setRange(0, 6)
+        self.bfl_safety.setValue(2)
+        form_layout.addRow("Safety tolerance (0-6):", self.bfl_safety)
+
+        self.bfl_timeout = QSpinBox()
+        self.bfl_timeout.setRange(30, 900)
+        self.bfl_timeout.setValue(180)
+        form_layout.addRow("Timeout (sec):", self.bfl_timeout)
+
+        self.gen_size = QComboBox()
+        self.gen_size.addItems(["1024x1024", "1024x1536", "1536x1024"])
+        self.gen_size.setCurrentText("1024x1024")
+        form_layout.addRow("Méret:", self.gen_size)
+
+        self.gen_n = QSpinBox()
+        self.gen_n.setRange(1, 10)
+        self.gen_n.setValue(1)
+        form_layout.addRow("Darab (n):", self.gen_n)
+        
+        layout.addLayout(form_layout)
+        
+        # Dialog buttons
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        self.button_box.accepted.connect(self.accept)
+        layout.addWidget(self.button_box)
+        
+        self.on_provider_changed()
+
+    def on_provider_changed(self):
+        is_openai = (self.gen_provider.currentIndex() == 0)
+
+        self.gen_quality.setEnabled(is_openai)
+        self.gen_transparent.setEnabled(is_openai)
+
+        self.bfl_key.setEnabled(not is_openai)
+        self.bfl_base_url.setEnabled(not is_openai)
+        self.bfl_endpoint.setEnabled(not is_openai)
+        self.bfl_output_format.setEnabled(not is_openai)
+        self.bfl_prompt_upsampling.setEnabled(not is_openai)
+        self.bfl_safety.setEnabled(not is_openai)
+        self.bfl_timeout.setEnabled(not is_openai)
+
 # ---------- UI ----------
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -982,105 +1091,42 @@ class MainWindow(QMainWindow):
 
         # --- Image generation panel ---
         gen_box = QGroupBox("Képgenerálás")
-        gen_form = QFormLayout(gen_box)
-
-        self.gen_provider = QComboBox()
-        self.gen_provider.addItems(["OpenAI (gpt-image-1.5)", "BFL (FLUX)"])
-        self.gen_provider.setCurrentIndex(0)
-        self.gen_provider.currentIndexChanged.connect(self.on_provider_changed)
-        gen_form.addRow("Provider:", self.gen_provider)
-
-        self.gen_quality = QComboBox()
-        self.gen_quality.addItems(["low", "medium", "high"])
-        self.gen_quality.setCurrentText("medium")
-        gen_form.addRow("Quality:", self.gen_quality)
-
-        self.gen_transparent = QCheckBox("Transzparens háttér (PNG)")
-        self.gen_transparent.setChecked(False)
-        gen_form.addRow("", self.gen_transparent)
-
-        self.bfl_key = QLineEdit(BFL_API_KEY)
-        self.bfl_key.setEchoMode(QLineEdit.Password)
-        self.bfl_key.setPlaceholderText("BFL_API_KEY (env) vagy ide írd be…")
-        gen_form.addRow("BFL API kulcs:", self.bfl_key)
-
-        self.bfl_base_url = QComboBox()
-        self.bfl_base_url.addItems([
-            "https://api.bfl.ai/v1",
-            "https://api.eu.bfl.ai/v1",
-            "https://api.us.bfl.ai/v1",
-        ])
-        self.bfl_base_url.setCurrentText(BFL_BASE_URL_DEFAULT)
-        gen_form.addRow("BFL base URL:", self.bfl_base_url)
-
-        self.bfl_endpoint = QComboBox()
-        self.bfl_endpoint.addItems([
-            "/flux-2-max",
-            "/flux-2-pro",
-            "/flux-2-flex",
-            "/flux-2-klein-4b",
-            "/flux-2-klein-9b",
-            "/flux-kontext-max",
-            "/flux-kontext-pro",
-            "/flux-pro-1.1-ultra",
-            "/flux-pro-1.1",
-            "/flux-pro",
-            "/flux-dev",
-        ])
-        self.bfl_endpoint.setCurrentText("/flux-pro-1.1")
-        gen_form.addRow("BFL endpoint:", self.bfl_endpoint)
-
-        self.bfl_output_format = QComboBox()
-        self.bfl_output_format.addItems(["png", "jpeg"])
-        self.bfl_output_format.setCurrentText("png")
-        gen_form.addRow("Output format:", self.bfl_output_format)
-
-        self.bfl_prompt_upsampling = QCheckBox("Prompt upsampling")
-        self.bfl_prompt_upsampling.setChecked(False)
-        gen_form.addRow("", self.bfl_prompt_upsampling)
-
-        self.bfl_safety = QSpinBox()
-        self.bfl_safety.setRange(0, 6)
-        self.bfl_safety.setValue(2)
-        gen_form.addRow("Safety tolerance (0-6):", self.bfl_safety)
-
-        self.bfl_timeout = QSpinBox()
-        self.bfl_timeout.setRange(30, 900)
-        self.bfl_timeout.setValue(180)
-        gen_form.addRow("Timeout (sec):", self.bfl_timeout)
-
-        self.gen_size = QComboBox()
-        self.gen_size.addItems(["1024x1024", "1024x1536", "1536x1024"])
-        self.gen_size.setCurrentText("1024x1024")
-        gen_form.addRow("Méret:", self.gen_size)
-
-        self.gen_n = QSpinBox()
-        self.gen_n.setRange(1, 10)
-        self.gen_n.setValue(1)
-        gen_form.addRow("Darab (n):", self.gen_n)
-
+        gen_layout = QVBoxLayout(gen_box)
+        
+        # Initialize Settings Dialog
+        self.gen_settings = ImageGenSettingsDialog(self)
+        
+        # Buttons Row
+        btn_row = QHBoxLayout()
+        
+        btn_settings = QPushButton("⚙️ Beállítások")
+        btn_settings.clicked.connect(self.open_gen_settings)
+        btn_row.addWidget(btn_settings)
+        
+        self.gen_btn = QPushButton("GENERATE IMAGE")
+        self.gen_btn.setStyleSheet("font-weight: bold; padding: 6px;")
+        self.gen_btn.clicked.connect(self.generate_image_clicked)
+        btn_row.addWidget(self.gen_btn)
+        
+        gen_layout.addLayout(btn_row)
+        
+        # Output folder row
         out_img_row = QHBoxLayout()
+        out_img_row.addWidget(QLabel("Mappa:"))
         self.gen_out_edit = QLineEdit(os.path.abspath(os.path.join("out", "generated_images")))
         btn_gen_out = QPushButton("Tallóz…")
         btn_gen_out.clicked.connect(self.pick_gen_out_dir)
         out_img_row.addWidget(self.gen_out_edit)
         out_img_row.addWidget(btn_gen_out)
-        gen_form.addRow("Képek mappája:", out_img_row)
+        gen_layout.addLayout(out_img_row)
 
-        btn_row = QHBoxLayout()
-        self.gen_btn = QPushButton("GENERATE IMAGE")
-        self.gen_btn.clicked.connect(self.generate_image_clicked)
-        self.gen_btn.setEnabled(True)
-        btn_row.addWidget(self.gen_btn)
-        gen_form.addRow("", btn_row)
 
         self.preview = QLabel("Előnézet: (generálás után itt megjelenik)")
         self.preview.setAlignment(Qt.AlignCenter)
-        self.preview.setMinimumHeight(220)
-        self.preview.setStyleSheet("border: 1px solid #444; padding: 6px;")
-        gen_form.addRow(self.preview)
+        self.preview.setMinimumHeight(350)
+        self.preview.setStyleSheet("border: 1px solid #444; background: #222;")
+        gen_layout.addWidget(self.preview)
 
-        self.on_provider_changed()
         right_layout.addWidget(gen_box)
 
         splitter.addWidget(right)
@@ -1090,6 +1136,8 @@ class MainWindow(QMainWindow):
         self.resize(1280, 860)
 
     # ----- UI helpers -----
+    def open_gen_settings(self):
+        self.gen_settings.exec()
     def pick_local_files(self):
         files, _ = QFileDialog.getOpenFileNames(
             self, "Képek kiválasztása", "", "Images (*.png *.jpg *.jpeg *.webp)"
@@ -1122,19 +1170,8 @@ class MainWindow(QMainWindow):
     def append_log(self, s: str):
         self.log.append(s)
 
-    def on_provider_changed(self):
-        is_openai = (self.gen_provider.currentIndex() == 0)
-
-        self.gen_quality.setEnabled(is_openai)
-        self.gen_transparent.setEnabled(is_openai)
-
-        self.bfl_key.setEnabled(not is_openai)
-        self.bfl_base_url.setEnabled(not is_openai)
-        self.bfl_endpoint.setEnabled(not is_openai)
-        self.bfl_output_format.setEnabled(not is_openai)
-        self.bfl_prompt_upsampling.setEnabled(not is_openai)
-        self.bfl_safety.setEnabled(not is_openai)
-        self.bfl_timeout.setEnabled(not is_openai)
+    # Movied to ImageGenSettingsDialog
+    # def on_provider_changed(self): ...
 
     def get_bg_type_code(self):
         idx = self.bg_combo.currentIndex()
@@ -1251,12 +1288,16 @@ class MainWindow(QMainWindow):
             return
 
         out_dir = self.gen_out_edit.text().strip()
-        size = self.gen_size.currentText()
-        n = int(self.gen_n.value())
+        
+        # Access settings from dialog
+        s = self.gen_settings
+        
+        size = s.gen_size.currentText()
+        n = int(s.gen_n.value())
 
         base_name = self.current_design_name or prompt.splitlines()[0][:80]
 
-        is_openai = (self.gen_provider.currentIndex() == 0)
+        is_openai = (s.gen_provider.currentIndex() == 0)
 
         self.gen_btn.setEnabled(False)
         self.preview.setText("Generálás folyamatban…")
@@ -1267,8 +1308,8 @@ class MainWindow(QMainWindow):
                 self.gen_btn.setEnabled(True)
                 return
 
-            quality = self.gen_quality.currentText()
-            transparent = self.gen_transparent.isChecked()
+            quality = s.gen_quality.currentText()
+            transparent = s.gen_transparent.isChecked()
 
             self.gen_worker = ImageGenWorker(
                 api_key=self.api_key(),
@@ -1286,18 +1327,18 @@ class MainWindow(QMainWindow):
             self.append_log("=== START (image gen / OpenAI) ===")
             self.gen_worker.start()
         else:
-            bfl_key = self.bfl_key.text().strip()
+            bfl_key = s.bfl_key.text().strip()
             if not bfl_key:
                 QMessageBox.critical(self, "Kulcs", "Hiányzik a BFL API kulcs (BFL_API_KEY).")
                 self.gen_btn.setEnabled(True)
                 return
 
-            base_url = self.bfl_base_url.currentText().strip()
-            endpoint = self.bfl_endpoint.currentText().strip()
-            output_format = self.bfl_output_format.currentText().strip()
-            prompt_upsampling = self.bfl_prompt_upsampling.isChecked()
-            safety_tolerance = int(self.bfl_safety.value())
-            timeout_sec = int(self.bfl_timeout.value())
+            base_url = s.bfl_base_url.currentText().strip()
+            endpoint = s.bfl_endpoint.currentText().strip()
+            output_format = s.bfl_output_format.currentText().strip()
+            prompt_upsampling = s.bfl_prompt_upsampling.isChecked()
+            safety_tolerance = int(s.bfl_safety.value())
+            timeout_sec = int(s.bfl_timeout.value())
 
             self.gen_worker = BFLImageGenWorker(
                 bfl_api_key=bfl_key,
