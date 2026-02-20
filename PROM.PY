@@ -294,7 +294,7 @@ def collect_card_images(
 
     return dedupe(urls)
 
-def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True, bg_type="transparent", use_contour=False) -> dict:
+def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True, bg_type="transparent", use_contour=False, aspect_ratio: str = "") -> dict:
     img_data_url = get_data_url(image_url)
 
     if force_text:
@@ -315,6 +315,31 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
         if use_contour:
             contour_instruction = "MUST include: thick black vector-style outline around the isolated elements (text and graphics) ONLY. Do NOT add a square frame or border around the entire image."
 
+        # Aspect ratio instruction
+        ar_instruction = ""
+        ar_label = ""
+        AR_MAP = {
+            "1:1 (négyzetesen)": ("1:1 square", "--ar 1:1"),
+            "3:4 (álló)": ("3:4 portrait (taller than wide)", "--ar 3:4"),
+            "4:5 (álló, Instagram)": ("4:5 portrait (Instagram style)", "--ar 4:5"),
+            "9:16 (álló, mobil)": ("9:16 portrait (mobile/story style)", "--ar 9:16"),
+            "4:3 (fekvő)": ("4:3 landscape", "--ar 4:3"),
+            "16:9 (fekvő, wide)": ("16:9 landscape (widescreen)", "--ar 16:9"),
+        }
+        if aspect_ratio and aspect_ratio in AR_MAP:
+            ar_desc, ar_label = AR_MAP[aspect_ratio]
+            ar_instruction = (
+                f"ASPECT RATIO: Design the artwork for a {ar_desc} canvas. "
+                "Fill the ENTIRE canvas — the graphic elements, text, and composition MUST extend to the edges. "
+                "NO large empty margins, NO small centered stamp on a big blank field. "
+                "The design should feel full, bold and immersive."
+            )
+        else:
+            ar_instruction = (
+                "CANVAS FILL: The graphic must fill the entire available space. "
+                "NO large empty margins. The design should feel full and immersive."
+            )
+
         system = (
             "Feladat: egy póló/pulcsi/mockup fotón látható NYOMAT alapján készíts EGY darab végleges képgeneráló promptot.\n"
             "\n"
@@ -322,18 +347,21 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
             "1) A pólót/pulcsit/modellt/mockupot IGNORÁLD. Ne írd le a ruhát.\n"
             "2) CSAK a nyomat grafikáját írd le: illusztráció + tipográfia + kompozíció.\n"
             f"3) HÁTTÉR: {bg_instruction}. {contour_instruction}\n"
-            "4) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. Ha magyar, írd: 'TEXT Hungarian: \"...\"'. Ha angol: 'TEXT English: \"...\"'.\n"
+            f"4) KÉPARÁNY / TÉRKIHASZNÁLÁS: {ar_instruction}\n"
+
+            "5) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. Ha magyar, írd: 'TEXT Hungarian: \"...\"'. Ha angol: 'TEXT English: \"...\"'.\n"
             "   FONTOS: NE használj '\\n' vagy sortörést a szövegben. Ehelyett írd le az elhelyezkedést: 'TEXT...' (above) 'TEXT...'.\n"
-            "5) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
+            "6) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
             "   TILOS bármilyen bizonytalanság jelölést beleírni a promptba (pl. UNCERTAIN, ?, brackets).\n"
             "   A bizonytalanságot kizárólag a debug mezőbe írd le.\n"
-            "6) Kimenet STRICT JSON a kért mezőkkel."
+            "7) Kimenet STRICT JSON a kért mezőkkel."
         )
 
+        ar_prompt_suffix = f" {ar_label}" if ar_label else ""
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} centered composition, print-ready clean design, and TEXT Hungarian: \\"CSAK EGY KAPÁS\\" (above) \\"VÁLASZT EL...\\" (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} {ar_instruction} centered composition, print-ready clean design, and TEXT Hungarian: \\"CSAK EGY KAPÁS\\" (above) \\"VÁLASZT EL...\\" (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.{ar_prompt_suffix}",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'
@@ -610,6 +638,7 @@ class ImageCrawlWorker(QThread):
         bg_type: str = "transparent",
         use_contour: bool = False,
         local_files: list[str] | None = None,
+        aspect_ratio: str = "",
     ):
         super().__init__()
         self.api_key = api_key
@@ -627,6 +656,7 @@ class ImageCrawlWorker(QThread):
         self.bg_type = bg_type
         self.use_contour = use_contour
         self.local_files = local_files
+        self.aspect_ratio = aspect_ratio
         self._stop = False
 
     def stop(self):
@@ -716,7 +746,8 @@ class ImageCrawlWorker(QThread):
                     img_url, 
                     force_text=self.force_text, 
                     bg_type=self.bg_type,
-                    use_contour=self.use_contour
+                    use_contour=self.use_contour,
+                    aspect_ratio=self.aspect_ratio,
                 )
 
                 self.save_cache(img_url, data)
@@ -1080,6 +1111,23 @@ class MainWindow(QMainWindow):
         self.contour_cb.setToolTip("Sticker style: vastag fekete körvonal a minta körül.")
         row5.addWidget(self.contour_cb)
 
+        row5.addWidget(QLabel("Képarány (prompt):"))
+        self.ar_combo = QComboBox()
+        self.ar_combo.addItems([
+            "(nincs megkötés)",
+            "1:1 (négyzetesen)",
+            "3:4 (álló)",
+            "4:5 (álló, Instagram)",
+            "9:16 (álló, mobil)",
+            "4:3 (fekvő)",
+            "16:9 (fekvő, wide)",
+        ])
+        self.ar_combo.setToolTip(
+            "A promptba épített képarány-utasítás. Külső AI-ok (Midjourney, Ideogram, stb.) is értelmezik.\n"
+            "Befolyásolja a kompozíciót és a térkihasználást is."
+        )
+        row5.addWidget(self.ar_combo)
+
         # --- Row 6: Path Filter ---
         row6 = QHBoxLayout()
         row6.addWidget(QLabel("Kép URL szűrő (path contains):"))
@@ -1260,6 +1308,13 @@ class MainWindow(QMainWindow):
         if idx == 5: return "none"
         return "transparent"
 
+    def get_ar_code(self) -> str:
+        """Return the selected aspect ratio string, or empty string if none."""
+        txt = self.ar_combo.currentText()
+        if txt.startswith("("):
+            return ""  # (nincs megkötés)
+        return txt
+
     # ----- Prompt crawl -----
     def start(self):
         is_local = (self.input_tabs.currentIndex() == 1)
@@ -1297,6 +1352,7 @@ class MainWindow(QMainWindow):
             require_productish=self.require_productish_cb.isChecked(),
             bg_type=self.get_bg_type_code(),
             use_contour=self.contour_cb.isChecked(),
+            aspect_ratio=self.get_ar_code(),
         )
         self.worker.log.connect(self.append_log)
         self.worker.done.connect(self.on_done)
@@ -1639,6 +1695,7 @@ class MainWindow(QMainWindow):
             if "force_text" in data: self.force_text_cb.setChecked(data["force_text"])
             if "bg_idx" in data: self.bg_combo.setCurrentIndex(data["bg_idx"])
             if "contour" in data: self.contour_cb.setChecked(data["contour"])
+            if "ar_idx" in data: self.ar_combo.setCurrentIndex(data["ar_idx"])
             if "path_filter" in data: self.path_filter_edit.setText(data["path_filter"])
             if "extra_hosts" in data: self.extra_hosts_edit.setText(data["extra_hosts"])
             if "require_productish" in data: self.require_productish_cb.setChecked(data["require_productish"])
@@ -1678,6 +1735,7 @@ class MainWindow(QMainWindow):
             "force_text": self.force_text_cb.isChecked(),
             "bg_idx": self.bg_combo.currentIndex(),
             "contour": self.contour_cb.isChecked(),
+            "ar_idx": self.ar_combo.currentIndex(),
             "path_filter": self.path_filter_edit.text(),
             "extra_hosts": self.extra_hosts_edit.text(),
             "require_productish": self.require_productish_cb.isChecked(),
