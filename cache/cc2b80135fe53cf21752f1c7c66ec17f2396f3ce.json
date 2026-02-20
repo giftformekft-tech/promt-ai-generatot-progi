@@ -1,28 +1,29 @@
 {
-  "prompt": "Create a bold, centered, print-ready flat vector illustration on a vibrant hot pink solid background, isolated artwork only; no garment, no mockup, no fabric, no shadows. Include a thick black vector-style outline around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. Main graphic: a cute, chubby smiling cactus with rounded pads, simple kawaii face with large black eyes and white highlights and a small smile, a small soft-pink flower on top, short white spine marks, sitting in a simple round brown pot; surround the cactus with scattered small green triangles and tiny star sparkles as decorative confetti. Typography: bold, chunky friendly all-caps display type, high legibility, heavy black outline matching the graphic outline, white fill with bright lime-green inner stroke on emphasized words, slight arch for the top lines and strong stacked rectangular alignment for the bottom lines, balanced kerning and compact leading for a tight print composition. Layout and hierarchy: top arched headline, second arched subhead directly below, central cactus graphic, then a small centered line above a large emphasized word and a final centered word below, all centered composition with even vertical spacing; ensure the large emphasis word dominates visually. Use flat colors, crisp vector edges, no textures, no gradients, print-ready separation of colors for screen printing. TEXT Hungarian: \"TÜRELEM\" (above) \"RÓZSÁT TEREM\" (above) \"NEKEM\" (above) \"KAKTUSZ\" (above) \"JUTOTT\".",
-  "negative_prompt": "no mockup, no clothing, no fabric texture, no shadows, no photorealism, no background details, no frame or border, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "Create a bold, print-ready vector illustration artwork only (isolated artwork only; no garment, no mockup, no fabric, no shadows). Vibrant hot pink solid background. Thick black vector-style outline around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. ASPECT RATIO: Design for a 4:5 portrait canvas and fill the ENTIRE canvas — graphic elements and text must extend to the edges with no large empty margins; composition full, bold and immersive, centered and cropped so elements reach the edges. MAIN GRAPHIC: a large, cute cartoon cactus with a kawaii face (round black eyes, small smiling mouth, subtle rosy cheeks), a single pink flower on top, many short white spikes, sitting in a simple brown pot; stylized green triangular confetti/radiating shapes behind the cactus to add energy. TYPOGRAPHY and TEXT Hungarian: \"TÜRELEM\" (top) \"RÓZSÁT TEREM\" (above cactus) \"NEKEM\" (below cactus) \"KAKTUSZ\" (large, dominant) \"JUTOTT\" (bottom). Typography: bold, condensed uppercase display style; smaller words in solid white uppercase with heavy black vector outline; the main green words (especially \"KAKTUSZ\" and \"RÓZSÁT TEREM\") in bright lime-to-emerald gradient with thick black vector outline and subtle inner highlight; letters slightly rounded, high contrast, with some letters overlapping or tucked behind the cactus to create an integrated stacked hierarchy. VISUAL STYLE: flat vector art with minimal smooth gradients for volume, crisp shapes, no photographic textures or realistic lighting; all isolated elements (text and graphics) have a thick black vector outline only. Layout: stacked, centered composition with elements intentionally cropped to the edges so the design reads as full-bleed; print-ready clean design, bold and playful. Isolated artwork only; no garment, no mockup, no fabric, no shadows. --ar 4:5",
+  "negative_prompt": "no mockup, no garment, no fabric, no shadows, no people, no photorealism, no background textures, no border, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "flat vector",
-    "cute kawaii",
-    "bold cartoon",
-    "clean lines",
-    "print-ready",
-    "playful typography",
-    "graphic emblem"
+    "cute",
+    "kawaii",
+    "bold",
+    "vector",
+    "flat",
+    "playful",
+    "graphic",
+    "print-ready"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "bright lime green",
+    "lime green",
+    "emerald green",
     "dark green",
-    "light green",
     "white",
-    "black (thick outlines)",
-    "soft pink (flower)",
+    "black",
+    "pink (flower)",
     "brown (pot)"
   ],
   "debug": {
     "extracted_text_raw": "TÜRELEM RÓZSÁT TEREM NEKEM KAKTUSZ JUTOTT",
     "confidence": "high",
-    "notes": "All words are clearly legible and follow the stacked layout: top 'TÜRELEM', second 'RÓZSÁT TEREM', then 'NEKEM', large emphasis 'KAKTUSZ', and final 'JUTOTT'. Accents (Ó, Á) are visible."
+    "notes": "All words are clearly legible in the image, arranged top-to-bottom; accents on vowels are present (e.g., Ü, Ó)."
   }
 }

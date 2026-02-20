@@ -1,26 +1,25 @@
 {
-  "prompt": "Vibrant hot pink solid background; centered composition; isolated print artwork only; thick black vector-style outline around the isolated elements (text and graphics) ONLY; no square frame or border around the entire image; print-ready clean design, high-contrast bold shapes, isolated artwork only; no garment, no mockup, no fabric, no shadows. Typography: bold, chunky playful bubble/retro comic display type in all caps, heavy thick black outline, bright yellow-to-gold gradient fill with subtle orange shading for depth and white highlight streaks on letter tops; letters slightly rounded with compact kerning and exaggerated soft counters for a fun, aggressive sticker look. Layout: stacked, dense vertical hierarchy — large top slogan line, smaller secondary line, very large emphasized central word, then a narrow supportive line and a final punchline line; decorative small puffy white clouds used as separators and overlapping letter edges for layering. Graphics: cheerful cartoon sun face ornament (simple round eyes, wide smile, short radial rays) integrated near the central word as an accent; additional small puffy white clouds and tiny accent stars or sparkles around text. All elements are vector-flat, high-contrast, crisp edges, center-aligned; maintain only the thick black vector-style outline around text and graphics. TEXT Hungarian: \"ÉLJ A MÁNAK!\" (above) \"MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ!\" Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.",
-  "negative_prompt": "no mockup, no garment, no fabric texture, no shadows, no photo, no people, no background clutter, no frame, no watermark, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "Create a bold, print-ready vector artwork (isolated artwork only; no garment, no mockup, no fabric, no shadows) on a vibrant hot pink solid background. MUST include a thick black vector-style outline around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. ASPECT RATIO: 4:5 portrait. Fill the ENTIRE canvas — the graphic elements, text, and composition MUST extend to the edges so the design feels full, bold and immersive. Centered, stacked composition with large chunky display typography and playful illustrative elements integrated into the type. Typography: heavy, rounded comic-style display letters, bright yellow fill with subtle flat highlight accents (no photorealistic shading), slight inner radius on letterforms for a friendly look, tightly kerned and slightly condensed so lines interlock; all type outlined with the same thick black vector stroke; small white cloud puffs used as separators and accents between lines, also outlined in the same thick black stroke. Graphic elements: a simple cartoon smiling sun character (bright yellow with orange cheeks and black vector outline) peeking from the right-middle area, small white rounded clouds scattered around and overlapping type to create a compact, full-bleed composition. Layout: stack the headline and body copy so the top phrase anchors the composition and the longer phrase fills the lower area, elements intentionally extend to the canvas edges (letters or clouds may cut off at the edges) to avoid empty margins. Flat vector look, high-contrast, print-ready. TEXT Hungarian: \"ÉLJ A MÁNAK!\" (above) \"MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ!\" isolated artwork only; no garment, no mockup, no fabric, no shadows. --ar 4:5",
+  "negative_prompt": "mockup, garment, t-shirt, hoodie, photo, fabric texture, realistic shadows, person, frame, border, background gradients, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "bold bubble lettering",
-    "sticker-style",
-    "cartoon",
+    "bold cartoon",
+    "comic display type",
+    "flat vector",
+    "high-contrast",
     "playful",
-    "vector",
     "print-ready",
-    "retro comic"
+    "full-bleed"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "sunny yellow",
-    "gold gradient",
-    "orange accents",
-    "white highlights",
-    "black outline"
+    "bright yellow (main text and sun)",
+    "white (clouds and highlights)",
+    "black (thick outlines)",
+    "orange (sun cheeks/accents)"
   ],
   "debug": {
-    "extracted_text_raw": "ÉLJ A MÁNAK! MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ! (there is a very small illegible URL/tagline at the bottom that I did not transcribe)",
+    "extracted_text_raw": "ÉLJ A MÁNAK! MERT A HOLNAP VALÓSZÍNŰLEG MÉG SZARABB LESZ!",
     "confidence": "high",
-    "notes": "Main large text is clear and reads as two stacked phrases with a multi-line structure; small tiny text or URL at the very bottom of the design is too small to read reliably, but the primary slogan text is clearly legible with accents on Á and Ó."
+    "notes": "Main headline and body copy are clear and legible in the image. There is a small illegible line of tiny text at the very bottom (likely a website) which is omitted from the prompt."
   }
 }

@@ -348,20 +348,22 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
             "2) CSAK a nyomat grafikáját írd le: illusztráció + tipográfia + kompozíció.\n"
             f"3) HÁTTÉR: {bg_instruction}. {contour_instruction}\n"
             f"4) KÉPARÁNY / TÉRKIHASZNÁLÁS: {ar_instruction}\n"
-
-            "5) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. Ha magyar, írd: 'TEXT Hungarian: \"...\"'. Ha angol: 'TEXT English: \"...\"'.\n"
+            "5) ELEM TELJESSÉGE: Minden grafikai elem (szöveg, ikonok, díszítések, felhők, figurák stb.) TELJES EGÉSZÉBEN látszódjon. "
+            "   TILOS, hogy a kép széle bármelyik elemet félbevágja. Ha az eredetin van levágott elem, A PROMPTBAN ezt ne utasítsd le — "
+            "   inkább írd bele: 'all decorative elements fully visible, none clipped or cut off by edges'.\n"
+            "6) A grafikán lévő SZÖVEGET próbáld kiolvasni pontosan. Ha magyar, írd: 'TEXT Hungarian: \"...\"'. Ha angol: 'TEXT English: \"...\"'.\n"
             "   FONTOS: NE használj '\\n' vagy sortörést a szövegben. Ehelyett írd le az elhelyezkedést: 'TEXT...' (above) 'TEXT...'.\n"
-            "6) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
+            "7) Ha a szöveg nem 100% biztos: akkor is adj BEST-GUESS szöveget a promptban, DE\n"
             "   TILOS bármilyen bizonytalanság jelölést beleírni a promptba (pl. UNCERTAIN, ?, brackets).\n"
             "   A bizonytalanságot kizárólag a debug mezőbe írd le.\n"
-            "7) Kimenet STRICT JSON a kért mezőkkel."
+            "8) Kimenet STRICT JSON a kért mezőkkel."
         )
 
         ar_prompt_suffix = f" {ar_label}" if ar_label else ""
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} {ar_instruction} centered composition, print-ready clean design, and TEXT Hungarian: \\"CSAK EGY KAPÁS\\" (above) \\"VÁLASZT EL...\\" (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.{ar_prompt_suffix}",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} {ar_instruction} centered composition, print-ready clean design, all decorative elements fully visible and none clipped or cut off by the canvas edges, and TEXT Hungarian: \\"CSAK EGY KAPÁS\\" (above) \\"VÁLASZT EL...\\" (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.{ar_prompt_suffix}",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'

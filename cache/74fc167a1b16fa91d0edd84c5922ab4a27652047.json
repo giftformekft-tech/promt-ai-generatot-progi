@@ -1,26 +1,27 @@
 {
-  "prompt": "Centered print artwork on a vibrant hot pink solid background, isolated artwork only; no garment, no mockup, no fabric, no shadows. Thick black vector-style outline around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. Composition: top bold headline, centered square comic-style illustration, large tagline below, all centered and print-ready clean design. Typography: top line in all-caps Hungarian display type, heavy condensed rounded sans with subtle hand-distressed texture, white fill, thick black vector stroke; middle speech text in bold comic sans-style uppercase inside a clean white speech bubble with a thin internal stroke and thick outer black vector outline; bottom tagline in large heavy rounded slab/bubble letters, all-caps Hungarian, white fill with subtle vintage distress, thick black vector stroke, tight letterspacing. Graphics: simplified flat-vector, cartoon-style, single-panel comic illustration of the “this is fine” dog motif rendered as a friendly tan-brown cartoon dog sitting at a small wooden table with a steaming mug, surrounded by stylized yellow-orange flames and small black smoke puffs; a small framed picture on the greenish wall behind the dog; keep shapes flat, high-contrast colors, minimal shading, and avoid photographic texture. All graphic elements enclosed only by the thick black vector-style outline; no drop shadows, no gradients, clean silhouette. Centered layout, balanced margins, print-ready separation of elements for screen printing. TEXT Hungarian: \"JELENLEGI ÁLLAPOTOM:\" (above) TEXT English: \"THIS IS FINE.\" (center) TEXT Hungarian: \"STABILAN INSTABIL\" (below)",
-  "negative_prompt": "no mockup, no garment, no fabric, no photo, no realistic textures, no shadows, no border, no extra frames, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
+  "prompt": "Create a bold, print-ready illustration and typographic design only (isolated artwork only; no garment, no mockup, no fabric, no shadows) on a vibrant hot pink solid background. Use thick black vector-style outlines around the isolated elements (text and graphics) ONLY; do NOT add a square frame or border around the entire image. ASPECT RATIO: Design for a 4:5 portrait canvas and fill the ENTIRE canvas — the graphic elements, text, and composition MUST extend to the edges so the design feels full, bold and immersive. Centered composition: large arched display type across the top reading TEXT Hungarian: \"JELENLEGI ÁLLAPOTOM:\" (above) in heavy condensed slab or bold display sans, white fill with subtle distressed texture, thick black outline. In the center place a compact, cartoon-style panel of the dog-at-a-table-in-fire scene: simplified flat-color shapes, saturated palette, minimal shading, crisp edges, coffee cup on table, stylized yellow-orange flames rising, and a speech bubble reading TEXT English: \"THIS IS FINE.\" in uppercase hand-lettered comic font; all illustration elements enclosed by the same thick black vector outline. Below the illustration place large stacked display type reading TEXT Hungarian: \"STABILAN INSTABIL\" (below) matching the top typography style, white fill with slight worn texture and thick black outline. Arrange typography and illustration so they interlock and extend boldly to the canvas edges (crop elements to edges where needed) to avoid large margins or a small centered stamp. Print-ready clean vector style, high contrast, solid fills, minimal gradients, good for screen-printing, centered and immersive composition. Isolated artwork only; no garment, no mockup, no fabric, no shadows. --ar 4:5",
+  "negative_prompt": "no mockup, no garment, no fabric texture, no photo, no shadows, no background gradients, no frame, no watermark, no extra unrelated text, t-shirt mockup, hoodie mockup, garment, fabric texture, wrinkles, folds, shadows, photo, model, background scene, studio lighting",
   "style_keywords": [
-    "flat vector",
-    "comic panel",
-    "bold display typography",
-    "thick black outline",
-    "print-ready",
-    "vintage distress"
+    "bold",
+    "comic",
+    "flat-vector",
+    "screen-print",
+    "retro distressed",
+    "high-contrast",
+    "hand-lettered",
+    "cartoon panel"
   ],
   "colors": [
     "vibrant hot pink (background)",
-    "white (text)",
-    "black (outline)",
-    "yellow",
-    "orange",
-    "tan/brown",
-    "green (wall)"
+    "white (text fills)",
+    "black (thick outlines)",
+    "yellow-orange (flames)",
+    "brown/tan (dog)",
+    "muted green/cream (interior elements)"
   ],
   "debug": {
     "extracted_text_raw": "JELENLEGI ÁLLAPOTOM: THIS IS FINE. STABILAN INSTABIL",
     "confidence": "high",
-    "notes": "Top Hungarian headline clearly reads 'JELENLEGI ÁLLAPOTOM:' including colon. Middle speech bubble English reads 'THIS IS FINE.' Bottom slogan reads 'STABILAN INSTABIL' in two stacked words; all are uppercase and legible."
+    "notes": "Top and bottom lines are clear uppercase Hungarian as shown without diacritics. Center speech bubble contains English 'THIS IS FINE.' Bottom phrase reads 'STABILAN INSTABIL' meaning 'stably unstable'; accents are not present on the original artwork."
   }
 }
