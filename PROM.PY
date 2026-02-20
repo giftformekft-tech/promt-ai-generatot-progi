@@ -358,12 +358,11 @@ def gpt_single_prompt_from_image(client: OpenAI, image_url: str, force_text=True
             "   A bizonytalanságot kizárólag a debug mezőbe írd le.\n"
             "8) Kimenet STRICT JSON a kért mezőkkel."
         )
-
         ar_prompt_suffix = f" {ar_label}" if ar_label else ""
         user = (
             "Kimenet (STRICT JSON):\n"
             "{\n"
-            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} {ar_instruction} centered composition, print-ready clean design, all decorative elements fully visible and none clipped or cut off by the canvas edges, and TEXT Hungarian: \\"CSAK EGY KAPÁS\\" (above) \\"VÁLASZT EL...\\" (best-guess exact artwork text, NO newlines/\\n). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.{ar_prompt_suffix}",\n'
+            f'  "prompt": "ONE strong English image generation prompt describing ONLY the PRINT ARTWORK. MUST include: {bg_instruction}, {contour_instruction} {ar_instruction} centered composition, print-ready clean design, all decorative elements fully visible and none clipped or cut off by the canvas edges. Include the EXACT text read from the artwork (best-guess, no uncertainty markers, no newlines/\\\\n — describe layout instead: above/below/left/right). Also describe typography, layout and graphics. Add explicitly: isolated artwork only; no garment, no mockup, no fabric, no shadows.{ar_prompt_suffix}",\n'
             '  "negative_prompt": "short negatives to avoid mockup/garment/photo",\n'
             '  "style_keywords": ["..."],\n'
             '  "colors": ["..."],\n'
